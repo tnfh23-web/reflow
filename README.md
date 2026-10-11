@@ -1,5 +1,3 @@
-바이브 코딩 프로젝트입니다.
-
 <p align="center">
   <img src="public/intro-install/library.webp" alt="REFLOW 예시 라이브러리 실제 화면" width="960">
 </p>
