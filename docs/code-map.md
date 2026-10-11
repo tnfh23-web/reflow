@@ -105,6 +105,10 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | `index.html` | React 루트와 웹앱 메타 정보를 제공한다. | src/main | 페이지 시작·메타 정보 |
 | `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답의 리디렉션 정보를 정규화해 로그인 복귀·재진입 오류를 방지한다. | vite.config, pwa | 오프라인 열람·업데이트 |
 
+| `public/google1737c3c3fb742fb4.html` | Google이 발급한 사이트 소유권 확인 파일이다. 내용과 경로를 유지한다. | Search Console, 정적 배포 | 소유권 확인 방식 변경 |
+| `public/robots.txt` | 공개 검색 크롤러에 API·제작 예시 제외와 사이트맵 위치를 안내한다. 접근 권한을 대신하지 않는다. | sitemap, 공개 검색 | 검색 수집 범위 |
+| `public/sitemap.xml` | 공개 루트 주소를 검색 엔진에 제공한다. 개인 자료·해시 화면은 넣지 않는다. | robots, Search Console | 공개 검색 페이지 |
+
 `package.json`은 실행 명령과 의존성, `public/manifest.webmanifest`는 앱 이름·아이콘·독립 창 설정이다. `.env.example`과 `cloud/.dev.vars.example`은 필요한 설정 이름의 예시다. 실제 `.env`·`.dev.vars` 값, 비밀번호·토큰·개인 자료를 문서에 옮기지 않는다. `.agents/skills/code-map/`은 문서 갱신 지침과 검사기다.
 
 ## 직접 만든 예시 사이트
@@ -183,6 +187,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/uploads.mjs": "4dca740115c9513b15460d3c43546aeaf9ecfc6ae1b72494ecef81f56c5ae7b7",
     "cloud/worker.mjs": "4267d6f297105f11ae8650f4a74b26294da3072ec684049f6909ac5acf7cb56a",
     "index.html": "63f9d18041a8113df47bda0f3b400eab254e429ea176c3fe7a909e2bfaabebf1",
+    "public/google1737c3c3fb742fb4.html": "99de3767dea5c93a1fea64f257fa209327c284fca65bf825f118132a2b6ee318",
     "public/samples/along.html": "0f21ddd56f88ae82ca76a903b59a9d084daaed8f6198abbe42b1bc4c604c078f",
     "public/samples/field-notes.html": "55691728843461cc1d244d1a209005a1697d99f29c797dd7f402265ac6b6cab1",
     "public/samples/flow-desk.html": "832595d6b104a45abe05fcd5b57553967c215d12011bfa3a8ba5dcfa7500cd2d",

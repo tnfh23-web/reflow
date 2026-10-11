@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /api/
+Disallow: /samples/
+
+Sitemap: https://reflow.tnfh23.workers.dev/sitemap.xml
