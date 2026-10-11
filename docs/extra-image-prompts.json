@@ -1,0 +1,37 @@
+{
+  "assets": [
+    {
+      "id": "architecture",
+      "prompt": "Create a standalone architectural editorial photograph for the website FORM ARCHIVE. Wide 3:2 landscape composition. Pale beige limestone contemporary architecture with a grand clean rectangular portal and curved archway behind it, sunlight and soft shadows, minimalist courtyard, a tiny olive tree, quiet blue sky. Straight refined photography, high end architectural magazine. No text, no UI, no labels, no logos. Match a calm cream-stone architectural photograph, clean bright exposure and tactile subtle stone. This is actual media to use inside a code-native sample website, not a webpage mockup."
+    },
+    {
+      "id": "forest",
+      "prompt": "Standalone photographic asset for FIELD NOTES editorial website, wide landscape 3:2. Deep green misty forest valley with a mountain ridge in the distance, a subtle hiking trail through a meadow in foreground, late afternoon luminous natural sky. Artistic film photography, lush tones but not oversaturated, layered depth and texture. No people, no text, no UI, no logos. Full bleed photograph."
+    },
+    {
+      "id": "sculpture",
+      "prompt": "Standalone photograph for FRAME ATELIER portfolio website. A beautiful polished silver abstract sculptural loop, sculptural thick flowing metal torus twisted slightly organically, resting on charcoal plinth against deep dark gray seamless background. Reflective material sharp luminous studio highlights, extremely refined, museum object photographed at three-quarter view. Portrait composition. No text, no UI, no logos."
+    },
+    {
+      "id": "ceramics",
+      "prompt": "Standalone still life editorial photograph for MATERIAL INDEX website. Warm pale apricot background and tabletop, matte terracotta sculptural ceramic objects: rounded tall vase, large bowl, rounded arched clay form, stack of flat circular plates. Strong considered asymmetrical composition, directional warm studio sunlight, sculptural shadows, orange earthy tactile materials. Landscape composition, high quality design magazine photography. No text, no UI, no logos."
+    }
+  ],
+  "states": [
+    {
+      "id": "06-save-state",
+      "prompt": "Create a fresh full desktop product UI concept screenshot 1536x1024 for REFLOW Korean web reference collection app. Use the attached accepted library design as strict visual system: pure white, sidebar208px pale coolgray, cobalt primary, Pretendard sans UI. Show the library dimmed slightly behind a centered 480px modal for new reference. Code-native practical UI, readable Korean copy: title '새 레퍼런스', close X upper right, explanation '기억해 둘 웹사이트의 URL을 입력하세요.', one label '웹사이트 URL', input with 'https://', primary text-only '저장하고 열기'. Small quiet text '저장 후 캡처가 이어집니다. 다른 화면으로 이동해도 괜찮아요.' No other fields. Absolutely no arrows, chevrons, plus signs anywhere. Do not invent statistics, steps, badges. Full proper app state, clean whitespace, restrained corners6px, modal12px, no decorative image inside modal.",
+      "reference": "C:\\Reflow\\design\\01-library-light.png"
+    },
+    {
+      "id": "07-library-dark",
+      "prompt": "Fresh full desktop REFLOW library dark mode screenshot matching attached accepted layout exactly. Main canvas #15171B, sidebar #1E2127, text #F3F4F6 muted #949BA8 borders #343943. Keep reference screenshot colors untouched, 3 recent images, 4column masonry allreferences, sidebar208px searchtop. Korean menus and copy same reference. Cobalt #3454F4 primary button '새 레퍼런스' text only. No arrow, chevron, plus anywhere. Practical native app typography Pretendard. No unnecessary extra UI.",
+      "reference": "C:\\Reflow\\design\\01-library-light.png"
+    },
+    {
+      "id": "08-direction-state",
+      "prompt": "Fresh full desktop REFLOW project board screenshot matching attached accepted board design. Purewhite main, coolgray208px sidebar,32px Pretendard title, native boardfouropen columns. Show a rightside320px inspector panel '디자인 방향' opening, leaving board visible. Panel clean typography separators, 4 blocks with headers '색상', '타이포그래피', '레이아웃', '인터랙션'. Each contains a concrete Korean application suggestion and source button with 'FORM ARCHIVE' or 'PULSE STUDIO'. Color swatches row #FFFFFF #191B20 #3454F4. Top close X; bottom text button '다시 생성'. No arrows, chevrons, plus anywhere. No metrics, no fake preview illustration. This is an AI-connected result-state concept, not evidence analysis performed.",
+      "reference": "C:\\Reflow\\design\\04-project-board.png"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "reflow",
+  "main": "cloud/worker.mjs",
+  "compatibility_date": "2026-10-11",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "account_id": "1950e8299622c6483e05253d1fcbbe9a",
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "COORDINATOR",
+        "class_name": "ReflowCoordinator"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "ReflowCoordinator"
+      ]
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "vars": {
+    "APP_ORIGIN": "https://reflow.tnfh23.workers.dev",
+    "GOOGLE_AUTH_ENABLED": "true",
+    "EMAIL_SIGNUP_ENABLED": "false"
+  },
+  "preview_urls": false
+}

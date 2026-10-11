@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "REFLOW · 리플로우",
+  "short_name": "REFLOW",
+  "description": "발견한 웹 장면을 저장하고, 비교하고, 다음 프로젝트에 다시 사용하는 시각 레퍼런스 서재.",
+  "lang": "ko",
+  "start_url": "/?source=app#library",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3454f4",
+  "icons": [
+    {"src":"/icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"/icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"/icons/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}

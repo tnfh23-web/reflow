@@ -1,0 +1,10 @@
+# These are Worker/server variables, not VITE_ variables. Never commit filled values.
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_PUBLISHABLE_KEY=
+# Generate locally: node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+SESSION_SECRET=
+APP_ORIGIN=https://YOUR_APP.workers.dev
+# Set only after the provider/redirect configuration is tested.
+GOOGLE_AUTH_ENABLED=false
+# Set only after SMTP delivery is configured and verified. Default mail is not public signup.
+EMAIL_SIGNUP_ENABLED=false
