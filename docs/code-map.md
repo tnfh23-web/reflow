@@ -22,8 +22,8 @@
 | Google Cloud | 로그인 클라이언트와 기본 계정 식별·이메일·프로필 권한 등록. 공개 앱에서 Google 로그인·개인 복사·메모 저장·프로젝트 생성/추가를 실제 검증했다. |
 | Cloudflare 공개 앱 | https://reflow.tnfh23.workers.dev 배포 완료. 승인된 전용 인증 정보는 소스 밖에 보관한다. |
 | `cloud/` 코드 | 공개 앱의 인증·저장·API·이미지 업로드·구간 저장·캡처 큐를 실행한다. 로컬 SQLite를 자동 이관하지 않았다. |
-| Cloudflare 캡처·클라우드 업로드 | Worker에 연결했다. 실제 Google 계정에서 메모·이미지 업로드·구간 저장·프로젝트 이미지 보존을 확인했다. Plus X 원격 캡처의 최종 검증은 제공자 실행 한도(429)로 보류됐다. 제한 회복 후 재검증해야 결과를 확정할 수 있다. |
-| 외부 AI | Gemini 연결 전. 정적 이미지에서 모션을 추측하거나 미연결 분석을 완료로 표시하지 않는다. |
+| Cloudflare 캡처·클라우드 업로드 | Worker에 연결했다. 실제 Google 계정에서 메모·이미지 업로드·구간 저장·프로젝트 이미지 보존을 확인했다. 2026-10-12 Plus X 원격 캡처의 실제 WebP·Hero 구간·CSS 정보·새로고침 후 저장 유지까지 확인했다. 이전 429 보류를 해소한 이번 실행 결과다. |
+| 외부 AI | Gemini 연결 전. 공개 bootstrap ai:false·비주얼 분석 버튼 비활성·의미 검색 요청의 keyword 응답을 확인했다. 공개 서버의 AI 처리와 검색 통합도 남아 있어 키만 넣어 완성되는 상태가 아니다. 정적 이미지에서 모션을 추측하지 않는다. |
 
 ## 화면과 공통 동작
 
@@ -48,7 +48,7 @@
 | `src/use-intro-motion.js` | 소개 제목의 글자별 등장·본문/이미지 등장 시점·움직임 감소를 관리한다. | Intro, GSAP SplitText/ScrollTrigger | 소개 등장 속도와 재진입 |
 | `src/use-auto-hide-header.js` | 아래로 스크롤할 때 헤더를 숨기고 위로 올릴 때 복구한다. | App 헤더 | 헤더 표시 시점 |
 | `src/motion.js` | GSAP/ScrollTrigger 등록과 일반 화면의 등장 동작을 공유한다. | 목록·보드·사용법·UI | 공통 모션 설정 |
-| `src/smooth-scroll.js` | 페이지와 이미지·패널·모달의 중첩 부드러운 스크롤을 관리한다. | App, Detail, Intro, Lenis | 스크롤 루트·이동·터치 대안 |
+| `src/smooth-scroll.js` | 페이지와 이미지·패널·모달의 중첩 부드러운 스크롤을 관리한다. 상세 구간 목록은 데스크톱 세로·모바일 가로 방향을 화면 배치대로 판별한다. | App, Detail, Intro, Lenis | 스크롤 루트·이동·터치 대안 |
 | `src/styles.css` | 전체 서비스의 레이아웃·공통 UI·반응형·테마를 정의한다. | 모든 서비스 화면 | 화면 크기·배치·공통 디자인 |
 | `src/guide.css` | 사용법과 연습 화면 스타일이다. | Guide | 사용법 레이아웃 |
 | `src/intro.css` | 소개 본문·설치 그래픽·섹션의 스타일이다. | Intro | 소개 레이아웃 |
@@ -225,7 +225,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/motion.js": "10bf4d7f00fd6f0fd97201733928e812b3075fa35efa7f41b40162b8a091e55a",
     "src/Projects.jsx": "26b655ecbd51e4fcd19e9138689372a276650ab8d07f265e76cfa6c90aa2b5bb",
     "src/pwa.js": "22bc30af10a62e0744561405ae4aab512269b727cb73e5d4730fcb3fd7eebff7",
-    "src/smooth-scroll.js": "728f370356aa70d160c86307dd4e74db9a52bc0e7fb51749ddcba4cfc9f20d77",
+    "src/smooth-scroll.js": "7012c573d75fc35536829486c7c1238c2d77043bd657fc4130faaab3129410c7",
     "src/styles.css": "0aff2752acdd96746f21bce22d591d9541ea8cb6a818fb16cbd0bd4fe0972779",
     "src/UI.jsx": "7f89abbea3f5325cb8ccd1886a870285fe835daeb7d3906d81a057c5011c0a32",
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",

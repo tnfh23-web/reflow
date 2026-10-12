@@ -27,7 +27,7 @@ export function useAppSmoothScroll(){
       for(const target of targets){
         const root=target===window;
         const style=root?null:getComputedStyle(target);
-        const horizontal=!root&&(style.flexDirection==='row'&&target.matches('.section-rail,.guide-step-list')||target.matches('.board,.recent-grid'));
+        const horizontal=!root&&(target.matches('.board,.recent-grid')||(target.matches('.section-rail,.guide-step-list')&&style.display.includes('flex')&&style.flexDirection==='row'));
         const orientation=horizontal?'horizontal':'vertical';
         const previous=instances.get(target);
         if(previous?.options.orientation===orientation)continue;
