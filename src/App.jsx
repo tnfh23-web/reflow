@@ -57,7 +57,7 @@ export default function App(){
   useEffect(()=>{const key=e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchInput.current?.focus();}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[]);
   useEffect(()=>{
     if(!data.user||!data.references.some(r=>['queued','working'].includes(r.status)))return;let stopped=false,running=false;
-    const poll=async()=>{if(running||document.hidden)return;running=true;try{const jobs=await api('/jobs');let update=false;for(const job of jobs){const before=seenJobs.current.get(job.id);seenJobs.current.set(job.id,job.state);if(before&&before!==job.state){update=true;if(job.state==='complete')toast('웹페이지 캡처를 저장했어요.');if(job.state==='failed')toast('캡처하지 못했어요. 상세에서 재시도하거나 이미지를 올려 주세요.');}}if(jobs.length)update=true;if(update&&!stopped)await refresh();}catch{}finally{running=false;}};
+    const poll=async()=>{if(running||document.hidden)return;running=true;try{const jobs=await api('/jobs');let update=false;for(const job of jobs){const before=seenJobs.current.get(job.id);seenJobs.current.set(job.id,job.state);if(before!==job.state){update=true;if(before&&job.state==='complete')toast('웹페이지 캡처를 저장했어요.');if(before&&job.state==='failed')toast('캡처하지 못했어요. 상세에서 재시도하거나 이미지를 올려 주세요.');}}if(update&&!stopped)await refresh();}catch{}finally{running=false;}};
     void poll();const timer=setInterval(poll,2000);return()=>{stopped=true;clearInterval(timer);};
   },[data.user?.id,data.references.map(r=>r.status).join(','),refresh,toast]);
   useEffect(()=>{

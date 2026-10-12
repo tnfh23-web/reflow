@@ -30,7 +30,7 @@
 | 파일 | 역할 | 연결되는 파일·기능 | 수정할 때 |
 |---|---|---|---|
 | `src/main.jsx` | React 앱을 시작하고 전역 스타일·PWA를 연결한다. | App, pwa, styles/guide CSS | 앱 시작과 공통 등록 |
-| `src/App.jsx` | 화면 이동·자료 상태·로그인 후 복귀·검색·작업 상태 확인·모달을 관리한다. | 모든 주요 화면, api, Dialogs | 사이드바·헤더·화면 이동·전체 자료 갱신 |
+| `src/App.jsx` | 화면 이동·자료 상태·로그인 후 복귀·검색·캡처 작업 상태 확인·모달을 관리한다. 캡처 상태가 달라질 때 전체 자료를 갱신한다. | 모든 주요 화면, api, Dialogs | 사이드바·헤더·화면 이동·전체 자료 갱신 |
 | `src/Library.jsx` | 예시/개인 레퍼런스 목록, 검색·필터·선택·미리보기·비교 진입을 표시한다. | App, UI, motion | 라이브러리 배열과 카드 조작 |
 | `src/Detail.jsx` | 큰 캡처와 구간 썸네일, 영역 선택·업로드·분석 패널을 제공한다. | Analysis, api, UI | 상세 이미지·구간 탐색·크롭 |
 | `src/Analysis.jsx` | 색·타이포·태그·실제 모션 증거와 메모·분류 편집을 표시한다. | Detail, Compare, api | 분석 설명·메모·태그 편집 |
@@ -208,7 +208,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
     "src/Analysis.jsx": "97161df4903289c815f7c670f018fe2a1509dd4668f60a1f7b0c1501dddfc09f",
     "src/api.js": "1405e82f849acec422434a894e66feae6df9fed727d298fb613b1e5c38613690",
-    "src/App.jsx": "1a7a496ec39f3ea6e9eea34da821038aaa21b4632171db81c94a6eedd8b98477",
+    "src/App.jsx": "3333594622f75c465d70dd910f2c6987337841d6231889e14b5333b7deb30ba3",
     "src/cloud-images.js": "9b7e7bf07ab6a4c087a8622f965a5e6374167980f286400096c8268a1800ddb7",
     "src/Compare.jsx": "a1501f864e0b920c1608572b23658329e66d92f4d0a9e981d4e1175caff7dce8",
     "src/Detail.jsx": "fa2ad09c35a43380eb158031c946c684157960a6750d9f353f1ea87555762737",
