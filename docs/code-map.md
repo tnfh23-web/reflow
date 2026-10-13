@@ -60,7 +60,7 @@
 |---|---|---|---|
 | `server/index.js` | Express를 시작하고 로그인·소유권·자료 CRUD·검색·캡처 작업·업로드·크롭을 처리한다. | store, capture, ai, dist | 현재 API 동작과 권한·작업 흐름 |
 | `server/store.js` | SQLite 테이블과 자료·프로젝트·미디어 소유자 저장/읽기 함수를 제공한다. | index, capture, seed | 로컬 저장 형식·조회 |
-| `server/capture.js` | 주소·접근 대상 검증, Playwright 캡처·실제 CSS/모션 관찰, WebP 저장·이미지 색 추출을 한다. | index, store, Playwright, Sharp | 캡처 품질·구간·관찰·이미지 처리 |
+| `server/capture.js` | 주소·접근 대상 검증, 화면 구간별 캡처 합성·실제 CSS/모션 관찰, WebP 저장·이미지 색 추출을 한다. | index, store, capture-ready, capture-tiles, Playwright, Sharp | 캡처 품질·구간·관찰·이미지 처리 |
 | `server/seed.js` | 직접 만든 예시 사이트를 촬영해 로컬 샘플 자료로 준비한다. | public/samples, capture, store | 예시 라이브러리 구성 |
 | `server/ai.js` | 키가 연결됐을 때만 Gemini에 JSON 분석을 요청한다. | index | 선택 AI 요청 형식·한도 오류 |
 
@@ -73,8 +73,9 @@
 | `cloud/auth.mjs` | Supabase Google PKCE·콜백·로그인·갱신·로그아웃과 암호화 HttpOnly 세션을 처리한다. | config, Supabase Auth | 실제 클라우드 로그인 |
 | `cloud/store.mjs` | 사용자 토큰으로 Supabase REST를 호출하고 수정 버전을 검사한다. | cloud/api, Supabase DB | 클라우드 저장·동시 수정 충돌 |
 | `cloud/media.mjs` | WebP 프레임 크기를 검사하고 사용자 토큰으로 비공개 이미지 저장/읽기를 처리한다. | Supabase Storage | 이미지 접근·새 파일 저장 |
-| `cloud/capture.mjs` | 격리된 원격 브라우저로 전체/구간 캡처·실제 CSS 값을 읽고 WebP를 저장한다. 새 원격 캡처의 모션 관찰은 아직 제공하지 않는다. | Browser Run, network, media | 원격 캡처 품질·제한 |
+| `cloud/capture.mjs` | 격리된 원격 브라우저에서 화면 구간별 캡처를 합쳐 전체/섹션 이미지와 실제 CSS 값을 저장한다. 새 원격 캡처의 모션 관찰은 아직 제공하지 않는다. | Browser Run, capture-ready, capture-tiles, network, media | 원격 캡처 품질·제한 |
 | `cloud/capture-ready.mjs` | 브라우저 내부에서 로딩 오버레이·화면 안정·이미지/영상 첫 프레임을 기다리고 지연 로딩 스크롤을 수행한다. | cloud/capture, server/capture | 로딩 화면만 저장되는 문제 |
+| `cloud/capture-tiles.mjs` | 스크롤 구간이 실제 화면에 나타날 때마다 캡처하고 반복되는 고정 메뉴를 제거한다. | cloud/capture, server/capture | 스크롤 등장 효과로 본문이 비는 문제 |
 | `cloud/capture-media.mjs` | 확인된 Vimeo 호스트의 영상 프레임에 필요한 부분만 읽고 리디렉션·DNS·응답 크기를 제한한다. | capture, network | 영상 프레임·미디어 접근 제한 |
 | `cloud/network.mjs` | DNS 응답의 비공개·예약 IP를 거부하고 캡처 요청 대상을 검사한다. | capture | 원격 접근 대상 검증 |
 | `cloud/jobs.mjs` | Durable Object에서 사용자별 작업 상태·암호화된 단기 작업 토큰·알람·순차 캡처·충돌 재시도를 관리한다. | capture, limits, store | 지속 캡처 큐·중단 처리 |
@@ -92,6 +93,7 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | 파일 | 역할 | 연결되는 파일·기능 | 수정할 때 |
 |---|---|---|---|
 | `tests/capture-ready.test.mjs` | 지연 로딩·로딩 고착·숨겨진 콘텐츠·스크롤 활성화·계속 변하는 텍스트를 실제 Chromium에서 검사한다. | capture-ready, Playwright | 캡처 준비 기준 변경 |
+| `tests/capture-tiles.test.mjs` | 화면 밖에서 다시 숨는 요소와 반복되는 고정 메뉴를 실제 Chromium에서 검사한다. | capture-tiles, Playwright, Sharp | 구간별 캡처 동작 변경 |
 | `tests/capture-media.test.mjs` | 공개 호스트 리디렉션·Range·초과 응답 차단을 검사한다. | capture-media | 영상 접근 검사 변경 |
 | `tests/cloud-auth.test.mjs` | 모의 제공자로 PKCE·세션 보호·로그인·갱신·이메일 확인을 검증한다. | cloud/auth, config, store | 인증 코드 변경 |
 | `tests/cloud-database.test.mjs` | PGlite에서 실제 SQL 정책의 소유자·익명 접근·버전·스냅샷 보존을 검증한다. | Supabase migration | DB 정책 변경 |
@@ -138,7 +140,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 
 ### URL 저장·캡처
 
-`Dialogs.jsx`가 URL을 `POST /api/references`로 보낸다. 서버는 로그인·중복·주소를 확인하고 URL을 먼저 DB에 저장한다. 캡처 작업이 `server/capture.js`에서 진행되고, 전체 캡처·구간·실제 관찰 정보가 이미지와 DB에 저장된다. App이 `/api/jobs` 상태를 확인해 완료 시 자료를 갱신한다. 캡처 실패해도 URL은 유지하며 상세에서 재시도·직접 업로드할 수 있다. 공개 앱에서는 `cloud/api`가 URL을 저장하고 `cloud/jobs`의 지속 큐에 작업을 넣는다. 알람이 Browser Run을 순차 실행하고 현재 수정 버전을 다시 읽어 캡처를 반영한다. 로컬·공개 캡처는 로딩 오버레이 제거와 화면 안정·미디어 준비를 기다리고 지연 로딩을 활성화한다. 준비가 끝나지 않으면 로딩 화면을 성공으로 저장하지 않는다. 공개 영상은 확인된 Vimeo 호스트에서 최대 4개의 1MB 응답만 읽는다. 새 원격 캡처는 전체/구간·CSS 정보까지 제공하며 스크롤/호버/메뉴/탭 관찰은 로컬 버전과 사전 제작 예시에 있다.
+`Dialogs.jsx`가 URL을 `POST /api/references`로 보낸다. 서버는 로그인·중복·주소를 확인하고 URL을 먼저 DB에 저장한다. 캡처 작업이 `server/capture.js`에서 진행되고, 전체 캡처·구간·실제 관찰 정보가 이미지와 DB에 저장된다. App이 `/api/jobs` 상태를 확인해 완료 시 자료를 갱신한다. 캡처 실패해도 URL은 유지하며 상세에서 재시도·직접 업로드할 수 있다. 공개 앱에서는 `cloud/api`가 URL을 저장하고 `cloud/jobs`의 지속 큐에 작업을 넣는다. 알람이 Browser Run을 순차 실행하고 현재 수정 버전을 다시 읽어 캡처를 반영한다. 로컬·공개 캡처는 로딩 오버레이 제거와 화면 안정·미디어 준비를 기다리고 지연 로딩을 활성화한다. 준비가 끝나지 않으면 로딩 화면을 성공으로 저장하지 않는다. `capture-tiles.mjs`는 본문이 화면에 나타난 순간마다 촬영하고 한 장으로 합쳐, 위로 돌아왔을 때 다시 숨는 스크롤 효과를 캡처한다. 공개 영상은 확인된 Vimeo 호스트에서 최대 4개의 1MB 응답만 읽는다. 새 원격 캡처는 전체/구간·CSS 정보까지 제공하며 스크롤/호버/메뉴/탭 관찰은 로컬 버전과 사전 제작 예시에 있다.
 
 ### 메모·태그·검색
 
@@ -177,7 +179,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/auth.mjs": "cf61966037836dabd905875211b33ed2435ccb797f998bf2d644ba58aa13cc0a",
     "cloud/capture-media.mjs": "ed0dabb4cd723e1a140aca44723a62ed65e0de9a6f3e1edc020efa8fefcc5e75",
     "cloud/capture-ready.mjs": "02a195263aeb518e53604d30be73388de6775664223e10c7f92a0cd2290f2c1e",
-    "cloud/capture.mjs": "bf82a45f1ecb51e18dd309dcea0eb7f3b695fb8720b0bb034794229b5c8de3bf",
+    "cloud/capture-tiles.mjs": "a012437bd46a8ec2a70ae99b7866639bb5717771e77e782a8908adc43a97605c",
+    "cloud/capture.mjs": "95ba04bd0a5c71d057597675c6bb5db970bdf4ed76ae26021633d5fe931a23f4",
     "cloud/config.mjs": "93a61142846ddfda4ab7fb4a8b7a50b3512eaad4f80a81d26caa7cc722b06956",
     "cloud/jobs.mjs": "17f363a7cbfe5dab18b6569f6150cc9001c896f00deb228bfe2c2c25a96a3fdb",
     "cloud/limits.mjs": "da87d87ed4fc429f3952528b8eec20847933c4c0fd66f7e311564fffe8a2ef7b",
@@ -202,7 +205,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "scripts/check-cloud-config.mjs": "1882c15eab9492a53eb26357e20ed41fcdc0961fb309447cd088db387496570b",
     "scripts/verify-cloud-public.mjs": "0cd62f20e9a9b7fcc4e7880af42cb4d62275e6a5d9a103a001e8eaf7683b00f8",
     "server/ai.js": "16cc2cb09c1bc639623f4385322398a54177d874c09ab801aae3ac760a2f7c83",
-    "server/capture.js": "486a2dc7503526b9d851ad8f8277af173dbe4692814f429b7b35a48221c4df42",
+    "server/capture.js": "494c6af1fd05f5d0beb954cdd14912005bb7b3daa2b417d9d9f97ec35c4413f2",
     "server/index.js": "a41fc30be4a0d996e2a52a9be2c99095e414817ab5d78c65d674dfc217e2ddcb",
     "server/seed.js": "8ef467badf576c17e0dba1f6dd1256e310f11f5c576d96734d3500073d09d535",
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
@@ -233,6 +236,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "supabase/migrations/202610110001_reflow.sql": "1210b7b4384a749714b2752d1ce3ae7509c59adabc349c49f89d71522d917ca4",
     "tests/capture-media.test.mjs": "a38f28df54b9c54042673bcf7a11337f1d3571352d046d71a4a5fe2bc8f238e4",
     "tests/capture-ready.test.mjs": "d48969c0cd77980c05f39f5ef572fcf2222710c43d693af7fa564c75d1b66b78",
+    "tests/capture-tiles.test.mjs": "22e41181e0c726daa4cefd284e5fb7aa3f2790a0b336fda715a28280b11d1cbf",
     "tests/cloud-api.test.mjs": "3622d7f1b4e1d64edd7548b9f6615d012cfe6e36f742be677a325c8ddb47f7c6",
     "tests/cloud-auth.test.mjs": "70ee87039d3e897d0b4079eb73a845058c026e5c29a297801bc347cec01a1a03",
     "tests/cloud-database.test.mjs": "67251a38fd1d95d558bb5e00aca1d73b962f65711d830ac00f80fed5c87766d6",

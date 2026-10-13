@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import {prepareCapture} from '../cloud/capture-ready.mjs';
+import {capturePageTiles} from '../cloud/capture-tiles.mjs';
 import { lookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
 import path from 'node:path';
@@ -78,8 +79,9 @@ export async function capture(url,owner) {
     const total=Math.min(originalHeight,16000);
     const observed=await page.evaluate(()=>{
       const rgbHex=c=>{const v=c.match(/[\d.]+/g);return v&&v.length>=3?'#'+v.slice(0,3).map(n=>Math.round(Number(n)).toString(16).padStart(2,'0')).join('').toUpperCase():null;};
-      const nodes=[...document.querySelectorAll('header, main > section, main > article, body > section, footer')];
-      const sections=nodes.map((n,i)=>{const r=n.getBoundingClientRect();return {name:n.dataset.section||n.getAttribute('aria-label')||n.querySelector('h1,h2')?.textContent?.trim().slice(0,40)|| (n.tagName==='FOOTER'?'Footer':n.tagName==='HEADER'?'Header':`섹션 ${i+1}`),y:Math.max(0,Math.round(r.top+scrollY)),height:Math.round(r.height)};}).filter(n=>n.height>100&&n.y<16000).slice(0,14);
+      const nodes=[...document.querySelectorAll('header, main > article, section, footer')]
+        .filter(n=>!n.parentElement?.closest('section'));
+      const sections=nodes.map((n,i)=>{const r=n.getBoundingClientRect();return {name:n.dataset.section||n.getAttribute('aria-label')||n.querySelector('h1,h2')?.textContent?.trim().slice(0,40)|| (n.tagName==='FOOTER'?'Footer':n.tagName==='HEADER'?'Header':`섹션 ${i+1}`),y:Math.max(0,Math.round(r.top+scrollY)),height:Math.round(r.height)};}).filter(n=>n.height>150&&n.y<16000).slice(0,14);
       const typeNodes=[document.querySelector('h1'),document.querySelector('h2'),document.querySelector('p')].filter(Boolean);
       const typography=typeNodes.map(n=>{const s=getComputedStyle(n);return {role:n.tagName==='H1'?'제목':n.tagName==='H2'?'소제목':'본문',family:s.fontFamily,size:s.fontSize,weight:s.fontWeight,lineHeight:s.lineHeight};});
       const colors=[{hex:rgbHex(getComputedStyle(document.body).backgroundColor),role:'본문 배경'},{hex:typeNodes[0]?rgbHex(getComputedStyle(typeNodes[0]).color):null,role:'제목 글자'},{hex:typeNodes[2]?rgbHex(getComputedStyle(typeNodes[2]).color):null,role:'본문 글자'}].filter(c=>c.hex);
@@ -88,7 +90,9 @@ export async function capture(url,owner) {
       const layout={display:getComputedStyle(document.querySelector('main')||document.body).display,columns:getComputedStyle(document.querySelector('main')||document.body).gridTemplateColumns};
       return {title,description:descriptions,sections,typography,colors,layout};
     });
-    const rawBuffer=await page.screenshot({type:'png',fullPage:true,clip:{x:0,y:0,width:1440,height:Math.max(1,total)}});
+    const tiles=await capturePageTiles(page,{height:Math.max(1,total)});
+    const rawBuffer=await sharp({create:{width:1440,height:Math.max(1,total),channels:4,background:'#fff'}})
+      .composite(tiles.map(tile=>({input:tile.body,left:0,top:tile.y}))).png().toBuffer();
     const rawMeta=await sharp(rawBuffer).metadata();
     const capturedHeight=Math.min(rawMeta.height,16000);
     const capturedWidth=Math.min(rawMeta.width,1440);

@@ -2,6 +2,7 @@ import {launch} from '@cloudflare/playwright';
 import {referenceUrl} from './api.mjs';
 import {verifyHost} from './network.mjs';
 import {prepareCapture} from './capture-ready.mjs';
+import {capturePageTiles} from './capture-tiles.mjs';
 import {previewMedia,previewMediaHosts} from './capture-media.mjs';
 
 const cdns = ['fonts.googleapis.com', 'fonts.gstatic.com', 'cdn.jsdelivr.net', 'cdnjs.cloudflare.com', 'images.unsplash.com'];
@@ -38,9 +39,10 @@ export async function captureWebsite(env, target, session, media) {
     await prepareCapture(page);
     const observed = await page.evaluate(() => {
       const height = Math.min(16000, Math.max(900, document.documentElement.scrollHeight));
-      const nodes = [...document.querySelectorAll('header,main>section,main>article,body>section,footer')];
+      const nodes = [...document.querySelectorAll('header,main>article,section,footer')]
+        .filter(n => !n.parentElement?.closest('section'));
       const sections = nodes.map(n => {const rect=n.getBoundingClientRect();return {name:(n.querySelector('h1,h2')?.textContent||n.tagName).trim().slice(0,60),
-        y:Math.max(0,Math.round(rect.top+scrollY)),height:Math.round(rect.height)};}).filter(n=>n.height>50&&n.y<height).slice(0,5);
+        y:Math.max(0,Math.round(rect.top+scrollY)),height:Math.round(rect.height)};}).filter(n=>n.height>150&&n.y<height).slice(0,8);
       const rgbHex = value => {const m=value.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?'#'+m.slice(1,4).map(n=>(+n).toString(16).padStart(2,'0')).join(''):null;};
       const typeNodes=[document.querySelector('h1'),document.querySelector('h2'),document.querySelector('p')].filter(Boolean);
       return {title:document.title.slice(0,150)||location.hostname,description:(document.querySelector('meta[name=description]')?.content||'').slice(0,2000),height,
@@ -50,18 +52,22 @@ export async function captureWebsite(env, target, session, media) {
     });
     const sections = observed.sections.length ? observed.sections : [{name:'Hero',y:0,height:900}];
     stage='screenshot';
-    const raster = await page.screenshot({type:'jpeg',quality:75,timeout:10000,fullPage:true,clip:{x:0,y:0,width:1440,height:observed.height}});
-    if(raster.length>8*1024*1024)throw new Error('Screenshot too large');
-    // Screenshot pixels are decoded on a fresh blank page, never in target JS.
+    const tiles = await capturePageTiles(page,{height:observed.height});
+    // Screenshot pixels are assembled on a fresh blank page, never in target JS.
     stage='conversion';
     const converter = await context.newPage();
-    const encoded = await converter.evaluate(async ({base64, height, sections}) => {
-      const image = new Image(); image.src = 'data:image/jpeg;base64,' + base64; await image.decode();
+    const encoded = await converter.evaluate(async ({tiles, height, sections}) => {
+      const image = document.createElement('canvas'); image.width=1440; image.height=height;
+      const context=image.getContext('2d');
+      for (const tile of tiles) {
+        const fragment=new Image();fragment.src='data:image/jpeg;base64,'+tile.base64;
+        await fragment.decode();context.drawImage(fragment,0,tile.y);
+      }
       const encode = (y,h,width) => {const canvas=document.createElement('canvas');canvas.width=width;canvas.height=Math.max(1,Math.round(h*width/1440));
         canvas.getContext('2d').drawImage(image,0,y,1440,h,0,0,canvas.width,canvas.height);return canvas.toDataURL('image/webp',0.78).split(',')[1];};
       return {full:encode(0,height,1440),thumb:encode(0,Math.min(900,height),960),
         sections:sections.map(s=>encode(s.y,Math.max(1,Math.min(s.height,height-s.y)),960))};
-    }, {base64:Buffer.from(raster).toString('base64'),height:observed.height,sections});
+    }, {tiles:tiles.map(tile=>({y:tile.y,base64:Buffer.from(tile.body).toString('base64')})),height:observed.height,sections});
     await browser.close(); browser = null; clearTimeout(deadline);
     const persist = value => media.persist(Uint8Array.from(atob(value),c=>c.charCodeAt(0)), session);
     stage='storage';
