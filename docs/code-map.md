@@ -1,6 +1,6 @@
 # REFLOW 파일 역할과 기능 흐름
 
-확인일: 2026-10-12. 문법을 몰라도 기능이 어디에서 처리되는지 찾기 위한 문서다. 현재 파일은 `.jsx/.js/.mjs`이며 TypeScript의 `.tsx/.ts`로 만든 프로젝트는 아니다.
+확인일: 2026-10-13. 문법을 몰라도 기능이 어디에서 처리되는지 찾기 위한 문서다. 현재 파일은 `.jsx/.js/.mjs`이며 TypeScript의 `.tsx/.ts`로 만든 프로젝트는 아니다.
 
 ## 처음에는 이 다섯 곳만 보면 된다
 
@@ -30,20 +30,21 @@
 | 파일 | 역할 | 연결되는 파일·기능 | 수정할 때 |
 |---|---|---|---|
 | `src/main.jsx` | React 앱을 시작하고 전역 스타일·PWA를 연결한다. | App, pwa, styles/guide CSS | 앱 시작과 공통 등록 |
-| `src/App.jsx` | 화면 이동·자료 상태·로그인 후 복귀·검색·캡처 작업 상태 확인·모달을 관리한다. 캡처 상태가 달라질 때 전체 자료를 갱신한다. | 모든 주요 화면, api, Dialogs | 사이드바·헤더·화면 이동·전체 자료 갱신 |
+| `src/App.jsx` | 화면 이동·자료 상태·로그인 후 복귀·검색·캡처 작업 상태 확인·모달과 공통 서비스 문서 링크를 관리한다. 캡처 상태가 달라질 때 전체 자료를 갱신하고 열린 앱에서 알린다. | 모든 주요 화면, api, Dialogs, notifications, 법적 문서 | 사이드바·헤더·화면 이동·전체 자료 갱신·알림 발생 |
 | `src/Library.jsx` | 예시/개인 레퍼런스 목록, 검색·필터·선택·미리보기·비교 진입을 표시한다. | App, UI, motion | 라이브러리 배열과 카드 조작 |
 | `src/Detail.jsx` | 큰 캡처와 구간 썸네일, 영역 선택·업로드·분석 패널을 제공한다. | Analysis, api, UI | 상세 이미지·구간 탐색·크롭 |
 | `src/Analysis.jsx` | 색·타이포·태그·실제 모션 증거와 메모·분류 편집을 표시한다. | Detail, Compare, api | 분석 설명·메모·태그 편집 |
 | `src/Compare.jsx` | 두 레퍼런스의 이미지·색·배치·인터랙션을 나란히 보여 준다. | Analysis, UI | 두 항목 비교 화면 |
 | `src/Projects.jsx` | 프로젝트 목록과 섹션별 보드, 순서·이름·항목 편집·스냅샷 탐색을 제공한다. | api, Dialogs, UI | 프로젝트와 보드 조작 |
-| `src/Dialogs.jsx` | 로그인·URL 저장·프로젝트 생성/추가·미리보기·설정 모달을 모은다. | App, api, UI | 입력창·저장 버튼·로그인·설정 |
+| `src/Dialogs.jsx` | 로그인·URL 저장·프로젝트 생성/추가·미리보기·설정 모달을 모은다. 공개 로그인에서 실제 연결된 Google만 안내하고 법적 문서를 연결한다. 설정에서 열린 앱의 OS 알림 허용·테스트를 관리한다. | App, api, UI, notifications, public/terms.html, public/privacy.html | 입력창·저장 버튼·로그인·알림 설정 |
 | `src/UI.jsx` | 버튼·아이콘·브랜드·빈 상태·이미지·태그·모달의 공통 모양과 동작이다. | 대부분의 화면 | 공통 버튼·포커스·모달 닫기 |
 | `src/cloud-images.js` | 브라우저에서 업로드 이미지를 WebP로 축소하고 선택 구간을 잘라 multipart로 보낸다. | Detail, cloud/uploads | 클라우드 업로드·크롭 변환 |
 | `src/api.js` | `/api` 요청·오류 처리와 날짜·태그 등의 공통 함수를 제공한다. | 화면, 로컬/클라우드 API | 요청 형식·공통 오류 처리 |
 | `src/Guide.jsx` | 단계별 사용법과 실제 자료를 바꾸지 않는 연습 화면을 제공한다. | App, UI, motion | 사용법 설명과 연습 |
 | `src/Install.jsx` | PWA 설치 가능 여부와 브라우저별 설치 안내를 보여 준다. | pwa, UI | 실제 앱 설치 안내 |
 | `src/pwa.js` | 설치 이벤트·설치 상태·서비스 워커 등록·업데이트 대기를 관리한다. | main, Install, App, sw | 설치 이벤트와 업데이트 알림 |
-| `src/Intro.jsx` | 설명 중심 소개 페이지와 실제 UI 형태의 자동 설치 안내를 구성한다. | IntroExtras, use-intro-motion, intro CSS | 소개 내용·섹션 배치·설치 그래픽 |
+| `src/notifications.js` | 사용자가 켠 경우에만 앱이 열려 있는 동안 캡처·프로젝트 변경을 OS 알림으로 표시한다. 푸시 구독이나 서버 발송은 하지 않는다. | App, Dialogs, public/sw | 알림 허용·내용·기기별 설정 |
+| `src/Intro.jsx` | 설명 중심 소개 페이지와 실제 UI 형태의 자동 설치 안내, 공개 서비스 문서 링크를 구성한다. | IntroExtras, use-intro-motion, intro CSS, 법적 문서 | 소개 내용·섹션 배치·설치 그래픽 |
 | `src/IntroExtras.jsx` | 자동 캡처·비교·검색 설명 그래픽과 전체 폭 마퀴를 만든다. | Intro, intro-extras CSS | 소개의 반복 그래픽·마퀴 |
 | `src/use-intro-motion.js` | 소개 제목의 글자별 등장·본문/이미지 등장 시점·움직임 감소를 관리한다. | Intro, GSAP SplitText/ScrollTrigger | 소개 등장 속도와 재진입 |
 | `src/use-auto-hide-header.js` | 아래로 스크롤할 때 헤더를 숨기고 위로 올릴 때 복구한다. | App 헤더 | 헤더 표시 시점 |
@@ -102,14 +103,18 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | `tests/cloud-network.test.mjs` | 내부/예약 IP와 혼합 DNS·빈 응답·DNS 오류의 차단을 검증한다. | network | 접근 대상 검사 변경 |
 | `tests/cloud-uploads.test.mjs` | 실제 multipart 형식으로 업로드·크롭·메타데이터 보존·한도 거절을 검증한다. | uploads, media | 업로드·크롭 변경 |
 | `tests/cloud-media.test.mjs` | 모의 Storage로 WebP 크기·소유자 차단·토큰·개인 이미지 no-store를 검증한다. | cloud/media | 미디어 어댑터 변경 |
+| `tests/open-notifications.test.mjs` | 알림을 명시적으로 켰을 때만 캡처·프로젝트 이벤트가 OS로 전달되고 끄면 중단되는지 검사한다. | src/notifications | 열린 앱 알림 변경 |
 | `vite.config.js` | React 빌드·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, public/sw, dist | 개발 서버·빌드·PWA 자산 |
 | `wrangler.jsonc` | Cloudflare Worker/정적 자산과 기본 기능 플래그를 구성한다. | cloud/worker, dist | 클라우드 배포 구성 |
 | `index.html` | React 루트와 웹앱 메타 정보를 제공한다. | src/main | 페이지 시작·메타 정보 |
-| `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답의 리디렉션 정보를 정규화해 로그인 복귀·재진입 오류를 방지한다. | vite.config, pwa | 오프라인 열람·업데이트 |
+| `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답을 정규화하고 알림 클릭 시 열린 앱으로 이동한다. | vite.config, pwa, notifications | 오프라인 열람·업데이트·알림 클릭 |
+| `public/legal.css` | 공개 이용약관·개인정보처리방침의 반응형 공통 스타일을 제공한다. | terms.html, privacy.html, Pretendard | 법적 문서 레이아웃·접근성 |
+| `public/terms.html` | 서비스 범위·외부 콘텐츠 권리·계정·자료 삭제와 문의 방법을 로그인 없이 안내한다. | legal.css, 로그인·설정·소개 링크 | 이용 조건 변경 |
+| `public/privacy.html` | 실제 로그인·저장·캡처와 외부 서비스의 개인정보 처리를 로그인 없이 안내한다. | legal.css, 로그인·설정·소개 링크 | 개인정보 처리 변경 |
 
 | `public/google1737c3c3fb742fb4.html` | Google이 발급한 사이트 소유권 확인 파일이다. 내용과 경로를 유지한다. | Search Console, 정적 배포 | 소유권 확인 방식 변경 |
 | `public/robots.txt` | 공개 검색 크롤러에 API·제작 예시 제외와 사이트맵 위치를 안내한다. 접근 권한을 대신하지 않는다. | sitemap, 공개 검색 | 검색 수집 범위 |
-| `public/sitemap.xml` | 공개 루트 주소를 검색 엔진에 제공한다. 개인 자료·해시 화면은 넣지 않는다. | robots, Search Console | 공개 검색 페이지 |
+| `public/sitemap.xml` | 공개 루트·이용약관·개인정보처리방침의 배포 정규 주소를 검색 엔진에 제공한다. 개인 자료·해시 화면은 넣지 않는다. | robots, Search Console | 공개 검색 페이지 |
 
 `package.json`은 실행 명령과 의존성, `public/manifest.webmanifest`는 앱 이름·아이콘·독립 창 설정이다. `.env.example`과 `cloud/.dev.vars.example`은 필요한 설정 이름의 예시다. 실제 `.env`·`.dev.vars` 값, 비밀번호·토큰·개인 자료를 문서에 옮기지 않는다. `.agents/skills/code-map/`은 문서 갱신 지침과 검사기다.
 
@@ -136,7 +141,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 
 `main.jsx`가 `App.jsx`를 표시한다. App이 `api.js`로 `GET /api/bootstrap`을 호출한다. 현재 `server/index.js`가 세션을 확인하고 `store.js`에서 예시·개인 자료·프로젝트를 읽어 돌려준다. App이 받은 값으로 라이브러리를 그린다.
 
-현재 로컬 로그인은 `Dialogs.jsx`의 이메일 입력을 로컬 서버에 보내고, 서버가 로그인 쿠키를 만든다. 로그인 후 App이 자료를 다시 불러오고 사용자가 하려던 저장·추가 동작으로 복귀한다. 공개 앱은 같은 Dialogs에서 Google 버튼을 표시한다. Worker가 Supabase PKCE를 시작하고 Google 로그인 결과를 `/api/auth/callback`으로 받아 암호화 HttpOnly 쿠키를 만든다. App은 원래 보던 화면과 저장/복사/프로젝트 추가 의도를 복구한다. 로그인 권한 최종 확인과 실계정 검증 상태는 상단 표에서 확인한다.
+현재 로컬 로그인은 `Dialogs.jsx`의 이메일 입력을 로컬 서버에 보내고, 서버가 로그인 쿠키를 만든다. 로그인 후 App이 자료를 다시 불러오고 사용자가 하려던 저장·추가 동작으로 복귀한다. 공개 앱은 같은 Dialogs에서 실제 연결된 Google 버튼과 이용약관·개인정보처리방침 링크를 표시한다. Worker가 Supabase PKCE를 시작하고 Google 로그인 결과를 `/api/auth/callback`으로 받아 암호화 HttpOnly 쿠키를 만든다. App은 원래 보던 화면과 저장/복사/프로젝트 추가 의도를 복구한다. 문서 HTML/CSS는 정적 자산이라 로그인 전에도 읽을 수 있고 소개·설정·일반 화면 하단에서 연결한다. 로그인 권한 최종 확인과 실계정 검증 상태는 상단 표에서 확인한다.
 
 ### URL 저장·캡처
 
@@ -152,7 +157,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 
 ### 설치·소개·오프라인
 
-실제 설치는 `pwa.js`가 브라우저 설치 이벤트를 받고 `Install.jsx`가 안내한다. 소개의 설치 그래픽은 `Intro.jsx`에 있는 자동 설명이며 실제 설치를 실행하지 않는다. `public/sw.js`는 앱 화면과 안내 자산만 캐시한다. 오프라인 상태에서 개인 자료 편집·새 캡처·기기 간 동기화를 제공한다고 설명하지 않는다.
+실제 설치는 `pwa.js`가 브라우저 설치 이벤트를 받고 `Install.jsx`가 안내한다. 소개의 설치 그래픽은 `Intro.jsx`에 있는 자동 설명이며 실제 설치를 실행하지 않는다. `public/sw.js`는 앱 화면과 안내 자산만 캐시한다. 설정에서 알림을 켜면 `notifications.js`가 앱이 열린 동안 캡처 완료·실패와 프로젝트 변경을 OS에 표시한다. `App.jsx`는 `/api/jobs`를 확인하며, 완료된 변경은 자료를 다시 불러온다. 서버 푸시 구독은 없어서 앱을 닫은 뒤 새 알림은 받지 않는다. 오프라인 상태에서 개인 자료 편집·새 캡처·기기 간 동기화를 제공한다고 설명하지 않는다.
 
 ## 무엇을 바꾸면 어디를 볼까
 
@@ -164,6 +169,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 | 프로젝트 정리 | src/Projects.jsx, Dialogs.jsx | 서버의 projects/items API, 스냅샷 보존 |
 | 소개 등장·마퀴 | Intro/IntroExtras, use-intro-motion | intro CSS, reduced-motion |
 | 앱 설치 | Install.jsx, pwa.js | manifest, sw.js, vite.config |
+| 열린 앱 알림 | notifications.js, App.jsx, Dialogs.jsx | sw.js 알림 클릭, jobs 상태 |
 | 로컬 캡처 품질 | server/capture.js | index.js 작업 큐·이미지 처리 |
 | 클라우드 로그인·저장 | cloud/auth, store, api, worker | Supabase 설정·RLS, UI 로그인 연결 |
 
@@ -191,6 +197,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/worker.mjs": "4267d6f297105f11ae8650f4a74b26294da3072ec684049f6909ac5acf7cb56a",
     "index.html": "63f9d18041a8113df47bda0f3b400eab254e429ea176c3fe7a909e2bfaabebf1",
     "public/google1737c3c3fb742fb4.html": "99de3767dea5c93a1fea64f257fa209327c284fca65bf825f118132a2b6ee318",
+    "public/legal.css": "8591196746eb2955a81d51ee170d51a405fab5ba1f627d8e3d51cb011d0666a2",
+    "public/privacy.html": "561f9a201cea5268554b35423c3c6514e19c87bb88ea66f6df0431cd5437c3e9",
     "public/samples/along.html": "0f21ddd56f88ae82ca76a903b59a9d084daaed8f6198abbe42b1bc4c604c078f",
     "public/samples/field-notes.html": "55691728843461cc1d244d1a209005a1697d99f29c797dd7f402265ac6b6cab1",
     "public/samples/flow-desk.html": "832595d6b104a45abe05fcd5b57553967c215d12011bfa3a8ba5dcfa7500cd2d",
@@ -201,7 +209,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "public/samples/sample.css": "4c61e5526efcfff8dd410aa0a3e6121090c80c45ea16eb58448b16579d48d3f1",
     "public/samples/sample.js": "ea8540213023840b072a41d63deb463ff12001faf4e582489569e96945326f08",
     "public/samples/studio-kin.html": "490412b48a9e980dfdd386e82e5426cb584aa39e7802859df836f85fe65d5460",
-    "public/sw.js": "f638de64ce0805945275a45fa1fc8f04246802b5bb9c920e65f0f5734fe80d28",
+    "public/sw.js": "76f57a76251b3a3628f18d0a1c9fa61c7d4aeee7f4fb9f2afceec1a2818ea126",
+    "public/terms.html": "bc48e633d213f273260dd8bf35d18273083345b7af3bfb5ee6cbd97adb06912c",
     "scripts/check-cloud-config.mjs": "1882c15eab9492a53eb26357e20ed41fcdc0961fb309447cd088db387496570b",
     "scripts/verify-cloud-public.mjs": "0cd62f20e9a9b7fcc4e7880af42cb4d62275e6a5d9a103a001e8eaf7683b00f8",
     "server/ai.js": "16cc2cb09c1bc639623f4385322398a54177d874c09ab801aae3ac760a2f7c83",
@@ -211,26 +220,27 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
     "src/Analysis.jsx": "97161df4903289c815f7c670f018fe2a1509dd4668f60a1f7b0c1501dddfc09f",
     "src/api.js": "1405e82f849acec422434a894e66feae6df9fed727d298fb613b1e5c38613690",
-    "src/App.jsx": "3333594622f75c465d70dd910f2c6987337841d6231889e14b5333b7deb30ba3",
+    "src/App.jsx": "f4493a46fd9cfb598bcc2c6ad883fa398547bac792b037aece6c4a3d0a1b9825",
     "src/cloud-images.js": "9b7e7bf07ab6a4c087a8622f965a5e6374167980f286400096c8268a1800ddb7",
     "src/Compare.jsx": "a1501f864e0b920c1608572b23658329e66d92f4d0a9e981d4e1175caff7dce8",
     "src/Detail.jsx": "fa2ad09c35a43380eb158031c946c684157960a6750d9f353f1ea87555762737",
-    "src/Dialogs.jsx": "46435fac30c9e812061b9e88b6351538ec7e847c9bfbdbd6cb88f436740fcf60",
+    "src/Dialogs.jsx": "a47a64c59e2dd47a7dca273674255ea2690caab44f035e71b46fcbcabaa979a4",
     "src/guide.css": "68a0b7a0c2f9021618ed487d6dab7494326ab3d40b1ef6e7b72fa744d452ccd7",
     "src/Guide.jsx": "0f85598b4ea2cf443bf7ac8ecece471cf6a3c8db019e7a642cb9d35abc912cda",
     "src/Install.jsx": "95de8adb7caadc5fd0fde1e2888e73e05cfa8adce2f995227816eba554b74b94",
     "src/intro-extras.css": "54a0b89f518ad6d5d90e97cb82a92d08deb6ca2fc5499c402304707ce6aa27ad",
     "src/intro.css": "e8348e5785250c49b85c86378198b36380702fe09d57bb71248e206fca257d2c",
-    "src/Intro.jsx": "c6bd82e441ab00b27ea9aff110ad9fb8ff99e52e13d31ec97b3a1952d165fb47",
+    "src/Intro.jsx": "1626ebf4d96407c71e9cdfb551d7ec0dcca01ae4ee769fcf049d7df7beeb3789",
     "src/IntroExtras.jsx": "4771ac53187800de7edb058b44c98a84612a4b549cb7f01929db3f914c8d91d1",
     "src/Library.jsx": "397c958af73b7c93a5baa2336f77c3f488409edf5f279ce14aaf364698649b20",
     "src/main.jsx": "fbb44ae27368a53fb4aa4197931e2a92a9eaca1aa92364af00d73d0005c49998",
     "src/motion.js": "10bf4d7f00fd6f0fd97201733928e812b3075fa35efa7f41b40162b8a091e55a",
+    "src/notifications.js": "72356bf4403b307ada276726c084d6d160bff33172dcd187e93e39d9e03b408c",
     "src/Projects.jsx": "26b655ecbd51e4fcd19e9138689372a276650ab8d07f265e76cfa6c90aa2b5bb",
     "src/pwa.js": "22bc30af10a62e0744561405ae4aab512269b727cb73e5d4730fcb3fd7eebff7",
     "src/smooth-scroll.js": "7012c573d75fc35536829486c7c1238c2d77043bd657fc4130faaab3129410c7",
-    "src/styles.css": "0aff2752acdd96746f21bce22d591d9541ea8cb6a818fb16cbd0bd4fe0972779",
-    "src/UI.jsx": "7f89abbea3f5325cb8ccd1886a870285fe835daeb7d3906d81a057c5011c0a32",
+    "src/styles.css": "70753e3e0b868a0558636eeeb80e736cd7e0dcf1d74dad0c59dd33586231d777",
+    "src/UI.jsx": "e95e1d0c468fa05614f5273cd266fda9ca2e12bbaea686ae8860d49f4d455cf3",
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",
     "src/use-intro-motion.js": "a55457b7567af906dd9928a793ea53fa8cd01b9f61e68e81da77192c45b8e696",
     "supabase/migrations/202610110001_reflow.sql": "1210b7b4384a749714b2752d1ce3ae7509c59adabc349c49f89d71522d917ca4",
@@ -244,6 +254,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "tests/cloud-media.test.mjs": "9ed215b3b06f4030f00723b8fdfe591bbd802f6538d784245e791e5058e39935",
     "tests/cloud-network.test.mjs": "6e516dea339e867fc40432b9e37e3eb9df5a74e0509fd44422e63bfb942ad879",
     "tests/cloud-uploads.test.mjs": "a05d91f123593191071e4d6f7439d4650598d13c063888733d19544ccbed1306",
+    "tests/open-notifications.test.mjs": "559495d67ecf381edd49d197122731acdc88c42f5ec94d9dcbdc3dddaac62286",
     "vite.config.js": "bd5c64eaff169b9a58700913e310d73a1f9a6feb3279fa74f1fe83495ab7fa0f",
     "wrangler.jsonc": "5cf33805ce38e75255cb994bd4db4ad6fc1d5d8dfb78d225267447c9a266cfdd"
   }

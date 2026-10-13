@@ -8,7 +8,7 @@ export function Icon({name}) {
 export function Brand(){return <span className="brand">REFLOW<span className="brand-mark"/></span>;}
 export function Button({children,primary=false,className='',type='button',...props}){return <button type={type} className={`button ${primary?'primary':''} ${className}`} {...props}>{children}</button>;}
 export function Empty({title,children,action}){return <div className="empty"><div className="empty-grid" aria-hidden="true"><span/><span/><span/></div><h2>{title}</h2><p>{children}</p>{action}</div>;}
-export function Modal({title,children,onClose,wide=false}){
+export function Modal({title,children,onClose,wide=false,className=''}){
   const ref=useRef(null),closeRef=useRef(onClose); closeRef.current=onClose;
   useLayoutEffect(()=>{if(!reduced()){gsap.fromTo(ref.current,{opacity:0,y:12,scale:.98},{opacity:1,y:0,scale:1,duration:.25,ease:'power2.out'});}},[]);
   useEffect(()=>{
@@ -18,7 +18,7 @@ export function Modal({title,children,onClose,wide=false}){
     const key=e=>{if(e.key==='Escape'){e.preventDefault();closeRef.current();}if(e.key==='Tab'){const list=focusable();if(!list.length)return;const first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}};
     document.addEventListener('keydown',key);return()=>{document.body.style.overflow=old;document.removeEventListener('keydown',key);if(previous?.isConnected)previous.focus();};
   },[]);
-  return <div className="modal-scrim" onPointerDown={e=>{if(e.target===e.currentTarget)onClose();}}><section ref={ref} className={`modal ${wide?'wide':''}`} role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header className="modal-head"><h2 id="dialog-title">{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><Icon name="close"/></button></header>{children}</section></div>;
+  return <div className={`modal-scrim ${className?'scrim-'+className:''}`} onPointerDown={e=>{if(e.target===e.currentTarget)onClose();}}><section ref={ref} className={`modal ${wide?'wide':''} ${className}`} role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header className="modal-head"><h2 id="dialog-title">{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><Icon name="close"/></button></header>{children}</section></div>;
 }
 export function Media({reference,full=false,className='',...props}){return reference.image?<img className={`media ${className}`} src={full?reference.image:reference.thumb||reference.image} alt={`${reference.title} ${full?'전체 페이지':'미리보기'}`} loading="lazy" decoding="async" {...props}/>:<div className="media-placeholder"><span>{reference.status==='failed'?'캡처를 확인해 주세요':'캡처를 준비하고 있어요'}</span></div>;}
 export function Tags({tags}){return <div className="tags">{tags.filter(Boolean).map((t,i)=><span key={t+i}>{t}</span>)}</div>;}
