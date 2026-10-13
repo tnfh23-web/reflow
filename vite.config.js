@@ -13,4 +13,4 @@ function appShell(){return {name:'reflow-app-shell',apply:'build',async closeBun
   worker=worker.replace('__REFLOW_BUILD__',hash).replace('/*__REFLOW_PRECACHE__*/[]',JSON.stringify(files));
   await writeFile('dist/sw.js',worker);
 }};}
-export default defineConfig({ plugins: [react(),appShell()], server: { strictPort: true, proxy: { '/api': 'http://127.0.0.1:4183' } }, build: { sourcemap: false } });
+export default defineConfig({ plugins: [react(),appShell()], server: { strictPort: true, proxy: { '/api': 'http://127.0.0.1:4183' } }, build: { sourcemap: false,rolldownOptions:{input:{app:'index.html',terms:'terms.html',privacy:'privacy.html'}} } });

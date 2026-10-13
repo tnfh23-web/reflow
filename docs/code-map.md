@@ -36,7 +36,7 @@
 | `src/Analysis.jsx` | 색·타이포·태그·실제 모션 증거와 메모·분류 편집을 표시한다. | Detail, Compare, api | 분석 설명·메모·태그 편집 |
 | `src/Compare.jsx` | 두 레퍼런스의 이미지·색·배치·인터랙션을 나란히 보여 준다. | Analysis, UI | 두 항목 비교 화면 |
 | `src/Projects.jsx` | 프로젝트 목록과 섹션별 보드, 순서·이름·항목 편집·스냅샷 탐색을 제공한다. | api, Dialogs, UI | 프로젝트와 보드 조작 |
-| `src/Dialogs.jsx` | 로그인·URL 저장·프로젝트 생성/추가·미리보기·설정 모달을 모은다. 공개 로그인에서 실제 연결된 Google만 안내하고 법적 문서를 연결한다. 설정에서 열린 앱의 OS 알림 허용·테스트를 관리한다. | App, api, UI, notifications, public/terms.html, public/privacy.html | 입력창·저장 버튼·로그인·알림 설정 |
+| `src/Dialogs.jsx` | 로그인·URL 저장·프로젝트 생성/추가·미리보기·설정 모달을 모은다. 공개 로그인에서 실제 연결된 Google만 안내하고 법적 문서를 연결한다. 설정에서 열린 앱의 OS 알림 허용·테스트를 관리한다. | App, api, UI, notifications, terms.html, privacy.html | 입력창·저장 버튼·로그인·알림 설정 |
 | `src/UI.jsx` | 버튼·아이콘·브랜드·빈 상태·이미지·태그·모달의 공통 모양과 동작이다. | 대부분의 화면 | 공통 버튼·포커스·모달 닫기 |
 | `src/cloud-images.js` | 브라우저에서 업로드 이미지를 WebP로 축소하고 선택 구간을 잘라 multipart로 보낸다. | Detail, cloud/uploads | 클라우드 업로드·크롭 변환 |
 | `src/api.js` | `/api` 요청·오류 처리와 날짜·태그 등의 공통 함수를 제공한다. | 화면, 로컬/클라우드 API | 요청 형식·공통 오류 처리 |
@@ -104,13 +104,14 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | `tests/cloud-uploads.test.mjs` | 실제 multipart 형식으로 업로드·크롭·메타데이터 보존·한도 거절을 검증한다. | uploads, media | 업로드·크롭 변경 |
 | `tests/cloud-media.test.mjs` | 모의 Storage로 WebP 크기·소유자 차단·토큰·개인 이미지 no-store를 검증한다. | cloud/media | 미디어 어댑터 변경 |
 | `tests/open-notifications.test.mjs` | 알림을 명시적으로 켰을 때만 캡처·프로젝트 이벤트가 OS로 전달되고 끄면 중단되는지 검사한다. | src/notifications | 열린 앱 알림 변경 |
-| `vite.config.js` | React 빌드·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, public/sw, dist | 개발 서버·빌드·PWA 자산 |
+| `vite.config.js` | React 앱과 두 정적 문서의 다중 페이지 빌드·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, index/terms/privacy HTML, public/sw, dist | 개발 서버·빌드·PWA 자산 |
 | `wrangler.jsonc` | Cloudflare Worker/정적 자산과 기본 기능 플래그를 구성한다. | cloud/worker, dist | 클라우드 배포 구성 |
 | `index.html` | React 루트와 웹앱 메타 정보를 제공한다. | src/main | 페이지 시작·메타 정보 |
 | `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답을 정규화하고 알림 클릭 시 열린 앱으로 이동한다. | vite.config, pwa, notifications | 오프라인 열람·업데이트·알림 클릭 |
-| `public/legal.css` | 공개 이용약관·개인정보처리방침의 반응형 공통 스타일을 제공한다. | terms.html, privacy.html, Pretendard | 법적 문서 레이아웃·접근성 |
-| `public/terms.html` | 서비스 범위·외부 콘텐츠 권리·계정·자료 삭제와 문의 방법을 로그인 없이 안내한다. | legal.css, 로그인·설정·소개 링크 | 이용 조건 변경 |
-| `public/privacy.html` | 실제 로그인·저장·캡처와 외부 서비스의 개인정보 처리를 로그인 없이 안내한다. | legal.css, 로그인·설정·소개 링크 | 개인정보 처리 변경 |
+| `src/legal.css` | 공개 문서의 앱형 사이드바·코발트 제목 띠·번호 목차·본문·모바일·다크 스타일을 제공한다. | terms.html, privacy.html, Pretendard | 서비스 문서 디자인·반응형 |
+| `src/legal.js` | 문서의 Lenis 스크롤·현재 목차·읽는 위치·헤더 표시·목차 접기·기기 테마를 관리한다. | 문서 HTML, Lenis, legal CSS | 문서 탐색·테마·접근성 |
+| `terms.html` | 서비스 범위·외부 콘텐츠 권리·계정·자료 삭제와 문의 방법을 로그인 없이 안내하는 빌드 진입 HTML이다. | legal.js, legal.css, 로그인·설정·소개 링크 | 이용 조건 변경 |
+| `privacy.html` | 실제 로그인·저장·캡처와 외부 서비스의 개인정보 처리를 로그인 없이 안내하는 빌드 진입 HTML이다. | legal.js, legal.css, 로그인·설정·소개 링크 | 개인정보 처리 변경 |
 
 | `public/google1737c3c3fb742fb4.html` | Google이 발급한 사이트 소유권 확인 파일이다. 내용과 경로를 유지한다. | Search Console, 정적 배포 | 소유권 확인 방식 변경 |
 | `public/robots.txt` | 공개 검색 크롤러에 API·제작 예시 제외와 사이트맵 위치를 안내한다. 접근 권한을 대신하지 않는다. | sitemap, 공개 검색 | 검색 수집 범위 |
@@ -196,9 +197,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/uploads.mjs": "4dca740115c9513b15460d3c43546aeaf9ecfc6ae1b72494ecef81f56c5ae7b7",
     "cloud/worker.mjs": "4267d6f297105f11ae8650f4a74b26294da3072ec684049f6909ac5acf7cb56a",
     "index.html": "63f9d18041a8113df47bda0f3b400eab254e429ea176c3fe7a909e2bfaabebf1",
+    "privacy.html": "6fc151721f47e675d88a25daee9749a557d90d736167b91c341443f5ebf11a79",
     "public/google1737c3c3fb742fb4.html": "99de3767dea5c93a1fea64f257fa209327c284fca65bf825f118132a2b6ee318",
-    "public/legal.css": "8591196746eb2955a81d51ee170d51a405fab5ba1f627d8e3d51cb011d0666a2",
-    "public/privacy.html": "561f9a201cea5268554b35423c3c6514e19c87bb88ea66f6df0431cd5437c3e9",
     "public/samples/along.html": "0f21ddd56f88ae82ca76a903b59a9d084daaed8f6198abbe42b1bc4c604c078f",
     "public/samples/field-notes.html": "55691728843461cc1d244d1a209005a1697d99f29c797dd7f402265ac6b6cab1",
     "public/samples/flow-desk.html": "832595d6b104a45abe05fcd5b57553967c215d12011bfa3a8ba5dcfa7500cd2d",
@@ -210,7 +210,6 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "public/samples/sample.js": "ea8540213023840b072a41d63deb463ff12001faf4e582489569e96945326f08",
     "public/samples/studio-kin.html": "490412b48a9e980dfdd386e82e5426cb584aa39e7802859df836f85fe65d5460",
     "public/sw.js": "76f57a76251b3a3628f18d0a1c9fa61c7d4aeee7f4fb9f2afceec1a2818ea126",
-    "public/terms.html": "bc48e633d213f273260dd8bf35d18273083345b7af3bfb5ee6cbd97adb06912c",
     "scripts/check-cloud-config.mjs": "1882c15eab9492a53eb26357e20ed41fcdc0961fb309447cd088db387496570b",
     "scripts/verify-cloud-public.mjs": "0cd62f20e9a9b7fcc4e7880af42cb4d62275e6a5d9a103a001e8eaf7683b00f8",
     "server/ai.js": "16cc2cb09c1bc639623f4385322398a54177d874c09ab801aae3ac760a2f7c83",
@@ -232,6 +231,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/intro.css": "e8348e5785250c49b85c86378198b36380702fe09d57bb71248e206fca257d2c",
     "src/Intro.jsx": "1626ebf4d96407c71e9cdfb551d7ec0dcca01ae4ee769fcf049d7df7beeb3789",
     "src/IntroExtras.jsx": "4771ac53187800de7edb058b44c98a84612a4b549cb7f01929db3f914c8d91d1",
+    "src/legal.css": "6d75e56c2a71e76dceff4bf6a22c51e0aaa813398f506015048eb37dc02ab26a",
+    "src/legal.js": "07decae3f41dc6edc62cacc5bf8b205792bc7641bbe5d316c3cfa31b5874ce04",
     "src/Library.jsx": "397c958af73b7c93a5baa2336f77c3f488409edf5f279ce14aaf364698649b20",
     "src/main.jsx": "fbb44ae27368a53fb4aa4197931e2a92a9eaca1aa92364af00d73d0005c49998",
     "src/motion.js": "10bf4d7f00fd6f0fd97201733928e812b3075fa35efa7f41b40162b8a091e55a",
@@ -239,11 +240,12 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/Projects.jsx": "26b655ecbd51e4fcd19e9138689372a276650ab8d07f265e76cfa6c90aa2b5bb",
     "src/pwa.js": "22bc30af10a62e0744561405ae4aab512269b727cb73e5d4730fcb3fd7eebff7",
     "src/smooth-scroll.js": "7012c573d75fc35536829486c7c1238c2d77043bd657fc4130faaab3129410c7",
-    "src/styles.css": "70753e3e0b868a0558636eeeb80e736cd7e0dcf1d74dad0c59dd33586231d777",
+    "src/styles.css": "d37d4983eff6e4972a3aca5018774bc66cbf10f4fa0e4701a92b906d1cd35cf4",
     "src/UI.jsx": "e95e1d0c468fa05614f5273cd266fda9ca2e12bbaea686ae8860d49f4d455cf3",
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",
     "src/use-intro-motion.js": "a55457b7567af906dd9928a793ea53fa8cd01b9f61e68e81da77192c45b8e696",
     "supabase/migrations/202610110001_reflow.sql": "1210b7b4384a749714b2752d1ce3ae7509c59adabc349c49f89d71522d917ca4",
+    "terms.html": "05f5251668dba18fd952af0365e03e29e9aab3060699ade420d8870137e1b299",
     "tests/capture-media.test.mjs": "a38f28df54b9c54042673bcf7a11337f1d3571352d046d71a4a5fe2bc8f238e4",
     "tests/capture-ready.test.mjs": "d48969c0cd77980c05f39f5ef572fcf2222710c43d693af7fa564c75d1b66b78",
     "tests/capture-tiles.test.mjs": "22e41181e0c726daa4cefd284e5fb7aa3f2790a0b336fda715a28280b11d1cbf",
@@ -255,7 +257,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "tests/cloud-network.test.mjs": "6e516dea339e867fc40432b9e37e3eb9df5a74e0509fd44422e63bfb942ad879",
     "tests/cloud-uploads.test.mjs": "a05d91f123593191071e4d6f7439d4650598d13c063888733d19544ccbed1306",
     "tests/open-notifications.test.mjs": "559495d67ecf381edd49d197122731acdc88c42f5ec94d9dcbdc3dddaac62286",
-    "vite.config.js": "bd5c64eaff169b9a58700913e310d73a1f9a6feb3279fa74f1fe83495ab7fa0f",
+    "vite.config.js": "a03da34bef24c16fff3eba616035fd6b7492688a13856956a4cb5e99822340aa",
     "wrangler.jsonc": "5cf33805ce38e75255cb994bd4db4ad6fc1d5d8dfb78d225267447c9a266cfdd"
   }
 }
