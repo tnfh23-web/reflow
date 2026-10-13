@@ -80,8 +80,10 @@ export async function capture(url,owner) {
     const observed=await page.evaluate(()=>{
       const rgbHex=c=>{const v=c.match(/[\d.]+/g);return v&&v.length>=3?'#'+v.slice(0,3).map(n=>Math.round(Number(n)).toString(16).padStart(2,'0')).join('').toUpperCase():null;};
       const nodes=[...document.querySelectorAll('header, main > article, section, footer')]
-        .filter(n=>!n.parentElement?.closest('section'));
-      const sections=nodes.map((n,i)=>{const r=n.getBoundingClientRect();return {name:n.dataset.section||n.getAttribute('aria-label')||n.querySelector('h1,h2')?.textContent?.trim().slice(0,40)|| (n.tagName==='FOOTER'?'Footer':n.tagName==='HEADER'?'Header':`섹션 ${i+1}`),y:Math.max(0,Math.round(r.top+scrollY)),height:Math.round(r.height)};}).filter(n=>n.height>150&&n.y<16000).slice(0,14);
+        .filter(n=>!n.parentElement?.closest('section'))
+        .filter(n=>{const r=n.getBoundingClientRect();return r.height>0&&(r.height>150||n.matches('header,footer'));});
+      const sectionCandidates=nodes.map((n,i)=>{const r=n.getBoundingClientRect();return {name:n.dataset.section||n.getAttribute('aria-label')||n.querySelector('h1,h2')?.textContent?.trim().slice(0,40)|| (n.tagName==='FOOTER'?'Footer':n.tagName==='HEADER'?'Header':`섹션 ${i+1}`),y:Math.max(0,Math.round(r.top+scrollY)),height:Math.round(r.height)};}).filter(n=>n.y<16000);
+      const sections=sectionCandidates.length>14?[...sectionCandidates.slice(0,13),sectionCandidates.at(-1)]:sectionCandidates;
       const typeNodes=[document.querySelector('h1'),document.querySelector('h2'),document.querySelector('p')].filter(Boolean);
       const typography=typeNodes.map(n=>{const s=getComputedStyle(n);return {role:n.tagName==='H1'?'제목':n.tagName==='H2'?'소제목':'본문',family:s.fontFamily,size:s.fontSize,weight:s.fontWeight,lineHeight:s.lineHeight};});
       const colors=[{hex:rgbHex(getComputedStyle(document.body).backgroundColor),role:'본문 배경'},{hex:typeNodes[0]?rgbHex(getComputedStyle(typeNodes[0]).color):null,role:'제목 글자'},{hex:typeNodes[2]?rgbHex(getComputedStyle(typeNodes[2]).color):null,role:'본문 글자'}].filter(c=>c.hex);

@@ -40,9 +40,11 @@ export async function captureWebsite(env, target, session, media) {
     const observed = await page.evaluate(() => {
       const height = Math.min(16000, Math.max(900, document.documentElement.scrollHeight));
       const nodes = [...document.querySelectorAll('header,main>article,section,footer')]
-        .filter(n => !n.parentElement?.closest('section'));
-      const sections = nodes.map(n => {const rect=n.getBoundingClientRect();return {name:(n.querySelector('h1,h2')?.textContent||n.tagName).trim().slice(0,60),
-        y:Math.max(0,Math.round(rect.top+scrollY)),height:Math.round(rect.height)};}).filter(n=>n.height>150&&n.y<height).slice(0,8);
+        .filter(n => !n.parentElement?.closest('section'))
+        .filter(n => {const r=n.getBoundingClientRect();return r.height>0&&(r.height>150||n.matches('header,footer'));});
+      const sectionCandidates = nodes.map(n => {const rect=n.getBoundingClientRect();return {name:(n.querySelector('h1,h2')?.textContent||n.tagName).trim().slice(0,60),
+        y:Math.max(0,Math.round(rect.top+scrollY)),height:Math.round(rect.height)};}).filter(n=>n.y<height);
+      const sections = sectionCandidates.length>8 ? [...sectionCandidates.slice(0,7),sectionCandidates.at(-1)] : sectionCandidates;
       const rgbHex = value => {const m=value.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?'#'+m.slice(1,4).map(n=>(+n).toString(16).padStart(2,'0')).join(''):null;};
       const typeNodes=[document.querySelector('h1'),document.querySelector('h2'),document.querySelector('p')].filter(Boolean);
       return {title:document.title.slice(0,150)||location.hostname,description:(document.querySelector('meta[name=description]')?.content||'').slice(0,2000),height,

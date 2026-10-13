@@ -140,7 +140,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 
 ### URL 저장·캡처
 
-`Dialogs.jsx`가 URL을 `POST /api/references`로 보낸다. 서버는 로그인·중복·주소를 확인하고 URL을 먼저 DB에 저장한다. 캡처 작업이 `server/capture.js`에서 진행되고, 전체 캡처·구간·실제 관찰 정보가 이미지와 DB에 저장된다. App이 `/api/jobs` 상태를 확인해 완료 시 자료를 갱신한다. 캡처 실패해도 URL은 유지하며 상세에서 재시도·직접 업로드할 수 있다. 공개 앱에서는 `cloud/api`가 URL을 저장하고 `cloud/jobs`의 지속 큐에 작업을 넣는다. 알람이 Browser Run을 순차 실행하고 현재 수정 버전을 다시 읽어 캡처를 반영한다. 로컬·공개 캡처는 로딩 오버레이 제거와 화면 안정·미디어 준비를 기다리고 지연 로딩을 활성화한다. 준비가 끝나지 않으면 로딩 화면을 성공으로 저장하지 않는다. `capture-tiles.mjs`는 본문이 화면에 나타난 순간마다 촬영하고 한 장으로 합쳐, 위로 돌아왔을 때 다시 숨는 스크롤 효과를 캡처한다. 공개 영상은 확인된 Vimeo 호스트에서 최대 4개의 1MB 응답만 읽는다. 새 원격 캡처는 전체/구간·CSS 정보까지 제공하며 스크롤/호버/메뉴/탭 관찰은 로컬 버전과 사전 제작 예시에 있다.
+`Dialogs.jsx`가 URL을 `POST /api/references`로 보낸다. 서버는 로그인·중복·주소를 확인하고 URL을 먼저 DB에 저장한다. 캡처 작업이 `server/capture.js`에서 진행되고, 전체 캡처·구간·실제 관찰 정보가 이미지와 DB에 저장된다. App이 `/api/jobs` 상태를 확인해 완료 시 자료를 갱신한다. 캡처 실패해도 URL은 유지하며 상세에서 재시도·직접 업로드할 수 있다. 공개 앱에서는 `cloud/api`가 URL을 저장하고 `cloud/jobs`의 지속 큐에 작업을 넣는다. 알람이 Browser Run을 순차 실행하고 현재 수정 버전을 다시 읽어 캡처를 반영한다. 로컬·공개 캡처는 로딩 오버레이 제거와 화면 안정·미디어 준비를 기다리고 지연 로딩을 활성화한다. 준비가 끝나지 않으면 로딩 화면을 성공으로 저장하지 않는다. `capture-tiles.mjs`는 본문이 화면에 나타난 순간마다 촬영하고 한 장으로 합쳐, 위로 돌아왔을 때 다시 숨는 스크롤 효과를 캡처한다. 구간 목록에서 작은 일반 요소는 제외하되 `header`와 `footer`는 높이에 관계없이 포함하며 구간 제한이 넘을 때는 마지막 구간을 보존한다. 공개 영상은 확인된 Vimeo 호스트에서 최대 4개의 1MB 응답만 읽는다. 새 원격 캡처는 전체/구간·CSS 정보까지 제공하며 스크롤/호버/메뉴/탭 관찰은 로컬 버전과 사전 제작 예시에 있다.
 
 ### 메모·태그·검색
 
@@ -180,7 +180,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/capture-media.mjs": "ed0dabb4cd723e1a140aca44723a62ed65e0de9a6f3e1edc020efa8fefcc5e75",
     "cloud/capture-ready.mjs": "02a195263aeb518e53604d30be73388de6775664223e10c7f92a0cd2290f2c1e",
     "cloud/capture-tiles.mjs": "a012437bd46a8ec2a70ae99b7866639bb5717771e77e782a8908adc43a97605c",
-    "cloud/capture.mjs": "95ba04bd0a5c71d057597675c6bb5db970bdf4ed76ae26021633d5fe931a23f4",
+    "cloud/capture.mjs": "0689a3ec113e3ec5f3a9d4803078dfba8af9f37e518846f0061a089ff9cc9fb6",
     "cloud/config.mjs": "93a61142846ddfda4ab7fb4a8b7a50b3512eaad4f80a81d26caa7cc722b06956",
     "cloud/jobs.mjs": "17f363a7cbfe5dab18b6569f6150cc9001c896f00deb228bfe2c2c25a96a3fdb",
     "cloud/limits.mjs": "da87d87ed4fc429f3952528b8eec20847933c4c0fd66f7e311564fffe8a2ef7b",
@@ -205,7 +205,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "scripts/check-cloud-config.mjs": "1882c15eab9492a53eb26357e20ed41fcdc0961fb309447cd088db387496570b",
     "scripts/verify-cloud-public.mjs": "0cd62f20e9a9b7fcc4e7880af42cb4d62275e6a5d9a103a001e8eaf7683b00f8",
     "server/ai.js": "16cc2cb09c1bc639623f4385322398a54177d874c09ab801aae3ac760a2f7c83",
-    "server/capture.js": "494c6af1fd05f5d0beb954cdd14912005bb7b3daa2b417d9d9f97ec35c4413f2",
+    "server/capture.js": "9306ecc912805aa9759c20df768d6b07c871e471e54576c3ae440eaa10b12f82",
     "server/index.js": "a41fc30be4a0d996e2a52a9be2c99095e414817ab5d78c65d674dfc217e2ddcb",
     "server/seed.js": "8ef467badf576c17e0dba1f6dd1256e310f11f5c576d96734d3500073d09d535",
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
