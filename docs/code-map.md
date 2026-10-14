@@ -44,7 +44,7 @@
 | `src/Install.jsx` | PWA 설치 가능 여부와 브라우저별 설치 안내를 보여 준다. | pwa, UI | 실제 앱 설치 안내 |
 | `src/pwa.js` | 설치 이벤트·설치 상태·서비스 워커 등록·업데이트 대기를 관리한다. | main, Install, App, sw | 설치 이벤트와 업데이트 알림 |
 | `src/notifications.js` | 사용자가 켠 경우에만 앱이 열려 있는 동안 캡처·프로젝트 변경을 OS 알림으로 표시한다. 푸시 구독이나 서버 발송은 하지 않는다. | App, Dialogs, public/sw | 알림 허용·내용·기기별 설정 |
-| `src/Intro.jsx` | 설명 중심 소개 페이지와 실제 UI 형태의 자동 설치 안내, 공개 서비스 문서 링크를 구성한다. | IntroExtras, use-intro-motion, intro CSS, 법적 문서 | 소개 내용·섹션 배치·설치 그래픽 |
+| `src/Intro.jsx` | 설명 중심 소개 페이지와 실제 UI 형태의 자동 설치 안내, 소개 내용을 구성한다. 푸터는 App의 공통 푸터를 사용한다. | IntroExtras, use-intro-motion, intro CSS, 법적 문서 | 소개 내용·섹션 배치·설치 그래픽 |
 | `src/IntroExtras.jsx` | 자동 캡처·비교·검색 설명 그래픽과 전체 폭 마퀴를 만든다. | Intro, intro-extras CSS | 소개의 반복 그래픽·마퀴 |
 | `src/use-intro-motion.js` | 소개 제목의 글자별 등장·본문/이미지 등장 시점·움직임 감소를 관리한다. | Intro, GSAP SplitText/ScrollTrigger | 소개 등장 속도와 재진입 |
 | `src/use-auto-hide-header.js` | 아래로 스크롤할 때 헤더를 숨기고 위로 올릴 때 복구한다. | App 헤더 | 헤더 표시 시점 |
@@ -57,7 +57,7 @@
 
 | `src/routes.js` | 소개·사용법의 공개 주소와 기존 hash 링크를 읽고, 개인 자료 이동 주소를 만든다. | App, public HTML, route 테스트 | 공개 주소·뒤로/앞으로 이동 |
 | `src/service-content.js` | 검색 제목·설명과 소개 활용 예시·전체 사용 순서·운영 방식별 FAQ를 공통으로 관리한다. | Intro, Guide, App, 공개 빌드 | 서비스 설명·검색 메타·사용 안내 |
-| `src/public-preview.jsx` | 기존 소개·사용법 컴포넌트와 앱 스타일로 빌드 시 공개 HTML 본문을 만든다. | prerender-public, Intro, Guide, UI | JavaScript 실행 전 공개 내용 |
+| `src/public-preview.jsx` | 기존 소개·사용법 컴포넌트와 앱 스타일·공통 푸터로 빌드 시 공개 HTML 본문을 만든다. | prerender-public, Intro, Guide, UI | JavaScript 실행 전 공개 내용 |
 | `scripts/prerender-public.mjs` | 배포용 공개 예시만 사용해 두 페이지를 정적 생성한다. 개인 자료·계정을 조회하지 않는다. | Vite 빌드, public-preview, cloud-samples | 공개 본문 생성·빌드 |
 | `about.html` | 소개의 독립 검색 주소·메타·공개 본문 삽입 위치와 앱 진입을 제공한다. | main, prerender-public, Intro | 소개 검색 정보·정적 진입 |
 | `guide.html` | 사용법의 독립 검색 주소·메타·전체 단계 안내 삽입 위치와 앱 진입을 제공한다. | main, prerender-public, Guide | 사용법 검색 정보·정적 진입 |
@@ -231,7 +231,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
     "src/Analysis.jsx": "97161df4903289c815f7c670f018fe2a1509dd4668f60a1f7b0c1501dddfc09f",
     "src/api.js": "1405e82f849acec422434a894e66feae6df9fed727d298fb613b1e5c38613690",
-    "src/App.jsx": "446bfdd93d0cf52d9514aa13bac12dfd87d13e87a4ed4753f3d373f6e22fb5f5",
+    "src/App.jsx": "6c032eaaabe59073f7409979267c6bd1f513d32fae63833819b6c77fe340dae1",
     "src/cloud-images.js": "9b7e7bf07ab6a4c087a8622f965a5e6374167980f286400096c8268a1800ddb7",
     "src/Compare.jsx": "a1501f864e0b920c1608572b23658329e66d92f4d0a9e981d4e1175caff7dce8",
     "src/Detail.jsx": "fa2ad09c35a43380eb158031c946c684157960a6750d9f353f1ea87555762737",
@@ -241,7 +241,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/Install.jsx": "95de8adb7caadc5fd0fde1e2888e73e05cfa8adce2f995227816eba554b74b94",
     "src/intro-extras.css": "54a0b89f518ad6d5d90e97cb82a92d08deb6ca2fc5499c402304707ce6aa27ad",
     "src/intro.css": "5a3b11d9943a452b23ad473e6c251d0c513b48c066e9e2a9c38beeff0dfb20b4",
-    "src/Intro.jsx": "cb8b7ac921d5ca8e161795f15d56967d0caf201368e839ccaf4f7dcd8c8c2f35",
+    "src/Intro.jsx": "b4e02677ec2d69c336f46e66bb4c8743168b49b8feede577d2a404f1937a97b7",
     "src/IntroExtras.jsx": "4771ac53187800de7edb058b44c98a84612a4b549cb7f01929db3f914c8d91d1",
     "src/legal.css": "6d75e56c2a71e76dceff4bf6a22c51e0aaa813398f506015048eb37dc02ab26a",
     "src/legal.js": "07decae3f41dc6edc62cacc5bf8b205792bc7641bbe5d316c3cfa31b5874ce04",
@@ -250,12 +250,12 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/motion.js": "10bf4d7f00fd6f0fd97201733928e812b3075fa35efa7f41b40162b8a091e55a",
     "src/notifications.js": "72356bf4403b307ada276726c084d6d160bff33172dcd187e93e39d9e03b408c",
     "src/Projects.jsx": "26b655ecbd51e4fcd19e9138689372a276650ab8d07f265e76cfa6c90aa2b5bb",
-    "src/public-preview.jsx": "38e2f9d91506faa4eb071e0de97b0006eecc8e1e70a7c60c86a527a2da7662f5",
+    "src/public-preview.jsx": "f1d1c84e67b3035882d9580d2181084a0837c1d4f1d1087c5e43d7452e122471",
     "src/pwa.js": "22bc30af10a62e0744561405ae4aab512269b727cb73e5d4730fcb3fd7eebff7",
     "src/routes.js": "07a66081a1e82e8449c5c1889f41bccc9baa5ee6714909b3871f56b9ed7893bd",
     "src/service-content.js": "6fc56aa8fc81af63fb8b636e5787e7ea9064c90ae83fb0fd4b22c0a23789f01c",
     "src/smooth-scroll.js": "7012c573d75fc35536829486c7c1238c2d77043bd657fc4130faaab3129410c7",
-    "src/styles.css": "8623a3577ad76f7e8a109e2e6d7c371ea288926f369da479d8ddbf4f3c288d60",
+    "src/styles.css": "6d80f334ae06e245d9b4456a0162fda2ec59392d5ba5eda9fe77c803cfb861d2",
     "src/UI.jsx": "e95e1d0c468fa05614f5273cd266fda9ca2e12bbaea686ae8860d49f4d455cf3",
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",
     "src/use-intro-motion.js": "a55457b7567af906dd9928a793ea53fa8cd01b9f61e68e81da77192c45b8e696",
