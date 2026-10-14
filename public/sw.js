@@ -16,11 +16,12 @@ self.addEventListener('fetch',event=>{
   if(!PRECACHE.length||request.method!=='GET'||url.origin!==self.location.origin)return;
   // API, authenticated captures, uploads and remote sites are never intercepted.
   const path=url.pathname;
-  const navigation=request.mode==='navigate'&&(path==='/'||path==='/index.html');
+  const pageShell=path==='/'||path==='/index.html'?'/index.html':path==='/about'||path==='/about.html'?'/about.html':path==='/guide'||path==='/guide.html'?'/guide.html':null;
+  const navigation=request.mode==='navigate'&&pageShell!==null;
   if(!navigation&&!allowed.has(path))return;
   event.respondWith((async()=>{
     const cache=await caches.open(CACHE);
-    const saved=await cache.match(navigation?'/index.html':path);
+    const saved=await cache.match(navigation?pageShell:path);
     const response=saved||await fetch(request);
     // Static hosts may redirect /index.html to /. A cached redirected response
     // is invalid for Chrome navigation's manual redirect mode (ERR_FAILED).

@@ -30,7 +30,7 @@
 | 파일 | 역할 | 연결되는 파일·기능 | 수정할 때 |
 |---|---|---|---|
 | `src/main.jsx` | React 앱을 시작하고 전역 스타일·PWA를 연결한다. | App, pwa, styles/guide CSS | 앱 시작과 공통 등록 |
-| `src/App.jsx` | 화면 이동·자료 상태·로그인 후 복귀·검색·캡처 작업 상태 확인·모달과 공통 서비스 문서 링크를 관리한다. 캡처 상태가 달라질 때 전체 자료를 갱신하고 열린 앱에서 알린다. | 모든 주요 화면, api, Dialogs, notifications, 법적 문서 | 사이드바·헤더·화면 이동·전체 자료 갱신·알림 발생 |
+| `src/App.jsx` | 공개 주소와 이전 hash 화면 이동·검색 메타·자료 상태·로그인 후 복귀·검색·캡처 작업 상태 확인·모달과 공통 서비스 문서 링크를 관리한다. 캡처 상태가 달라질 때 전체 자료를 갱신하고 열린 앱에서 알린다. | 모든 주요 화면, api, Dialogs, notifications, 법적 문서 | 사이드바·헤더·화면 이동·전체 자료 갱신·알림 발생 |
 | `src/Library.jsx` | 예시/개인 레퍼런스 목록, 검색·필터·선택·미리보기·비교 진입을 표시한다. | App, UI, motion | 라이브러리 배열과 카드 조작 |
 | `src/Detail.jsx` | 큰 캡처와 구간 썸네일, 영역 선택·업로드·분석 패널을 제공한다. | Analysis, api, UI | 상세 이미지·구간 탐색·크롭 |
 | `src/Analysis.jsx` | 색·타이포·태그·실제 모션 증거와 메모·분류 편집을 표시한다. | Detail, Compare, api | 분석 설명·메모·태그 편집 |
@@ -40,7 +40,7 @@
 | `src/UI.jsx` | 버튼·아이콘·브랜드·빈 상태·이미지·태그·모달의 공통 모양과 동작이다. | 대부분의 화면 | 공통 버튼·포커스·모달 닫기 |
 | `src/cloud-images.js` | 브라우저에서 업로드 이미지를 WebP로 축소하고 선택 구간을 잘라 multipart로 보낸다. | Detail, cloud/uploads | 클라우드 업로드·크롭 변환 |
 | `src/api.js` | `/api` 요청·오류 처리와 날짜·태그 등의 공통 함수를 제공한다. | 화면, 로컬/클라우드 API | 요청 형식·공통 오류 처리 |
-| `src/Guide.jsx` | 단계별 사용법과 실제 자료를 바꾸지 않는 연습 화면을 제공한다. | App, UI, motion | 사용법 설명과 연습 |
+| `src/Guide.jsx` | 단계별 사용법·전체 사용 순서와 예시·운영 방식별 FAQ·실제 자료를 바꾸지 않는 연습 화면을 제공한다. | App, UI, motion | 사용법 설명과 연습 |
 | `src/Install.jsx` | PWA 설치 가능 여부와 브라우저별 설치 안내를 보여 준다. | pwa, UI | 실제 앱 설치 안내 |
 | `src/pwa.js` | 설치 이벤트·설치 상태·서비스 워커 등록·업데이트 대기를 관리한다. | main, Install, App, sw | 설치 이벤트와 업데이트 알림 |
 | `src/notifications.js` | 사용자가 켠 경우에만 앱이 열려 있는 동안 캡처·프로젝트 변경을 OS 알림으로 표시한다. 푸시 구독이나 서버 발송은 하지 않는다. | App, Dialogs, public/sw | 알림 허용·내용·기기별 설정 |
@@ -55,6 +55,15 @@
 | `src/intro.css` | 소개 본문·설치 그래픽·섹션의 스타일이다. | Intro | 소개 레이아웃 |
 | `src/intro-extras.css` | 마퀴와 추가 자동 그래픽의 모양·반복 모션이다. | IntroExtras | 마퀴·설명 그래픽 스타일 |
 
+| `src/routes.js` | 소개·사용법의 공개 주소와 기존 hash 링크를 읽고, 개인 자료 이동 주소를 만든다. | App, public HTML, route 테스트 | 공개 주소·뒤로/앞으로 이동 |
+| `src/service-content.js` | 검색 제목·설명과 소개 활용 예시·전체 사용 순서·운영 방식별 FAQ를 공통으로 관리한다. | Intro, Guide, App, 공개 빌드 | 서비스 설명·검색 메타·사용 안내 |
+| `src/public-preview.jsx` | 기존 소개·사용법 컴포넌트와 앱 스타일로 빌드 시 공개 HTML 본문을 만든다. | prerender-public, Intro, Guide, UI | JavaScript 실행 전 공개 내용 |
+| `scripts/prerender-public.mjs` | 배포용 공개 예시만 사용해 두 페이지를 정적 생성한다. 개인 자료·계정을 조회하지 않는다. | Vite 빌드, public-preview, cloud-samples | 공개 본문 생성·빌드 |
+| `about.html` | 소개의 독립 검색 주소·메타·공개 본문 삽입 위치와 앱 진입을 제공한다. | main, prerender-public, Intro | 소개 검색 정보·정적 진입 |
+| `guide.html` | 사용법의 독립 검색 주소·메타·전체 단계 안내 삽입 위치와 앱 진입을 제공한다. | main, prerender-public, Guide | 사용법 검색 정보·정적 진입 |
+| `tests/public-routes.test.mjs` | 공개 주소·이전 hash 링크·개인 자료 주소 복귀를 검사한다. | routes | 화면 이동 회귀 검증 |
+| `tests/public-content.test.mjs` | 생성 HTML의 공통 메타·전체 안내·공개 예시만 포함하는지 검사한다. | service-content, dist 공개 HTML | 검색 가능 본문 검증 |
+| `tests/public-navigation.test.mjs` | PWA가 공개 페이지별 HTML을 열고 리다이렉트 응답을 정규화하며 API를 제외하는지 검사한다. | public/sw | 설치판 공개 주소 검증 |
 ## 현재 로컬 서버
 
 | 파일 | 역할 | 연결되는 파일·기능 | 수정할 때 |
@@ -104,10 +113,10 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | `tests/cloud-uploads.test.mjs` | 실제 multipart 형식으로 업로드·크롭·메타데이터 보존·한도 거절을 검증한다. | uploads, media | 업로드·크롭 변경 |
 | `tests/cloud-media.test.mjs` | 모의 Storage로 WebP 크기·소유자 차단·토큰·개인 이미지 no-store를 검증한다. | cloud/media | 미디어 어댑터 변경 |
 | `tests/open-notifications.test.mjs` | 알림을 명시적으로 켰을 때만 캡처·프로젝트 이벤트가 OS로 전달되고 끄면 중단되는지 검사한다. | src/notifications | 열린 앱 알림 변경 |
-| `vite.config.js` | React 앱과 두 정적 문서의 다중 페이지 빌드·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, index/terms/privacy HTML, public/sw, dist | 개발 서버·빌드·PWA 자산 |
+| `vite.config.js` | React 앱·소개·사용법·두 정적 문서의 다중 페이지 빌드와 공개 본문 생성·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, index/terms/privacy HTML, public/sw, dist | 개발 서버·빌드·PWA 자산 |
 | `wrangler.jsonc` | Cloudflare Worker/정적 자산과 기본 기능 플래그를 구성한다. | cloud/worker, dist | 클라우드 배포 구성 |
 | `index.html` | React 루트·검색용 PNG 아이콘·정규 주소·공유 메타 정보와 WebSite 사이트명 정보를 제공한다. | src/main, public/icons | 페이지 시작·검색/공유 메타 정보 |
-| `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답을 정규화하고 알림 클릭 시 열린 앱으로 이동한다. | vite.config, pwa, notifications | 오프라인 열람·업데이트·알림 클릭 |
+| `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 소개·사용법의 공개 HTML도 캐시하고 이동 응답을 정규화하며 알림 클릭 시 열린 앱으로 이동한다. | vite.config, pwa, notifications | 오프라인 열람·업데이트·알림 클릭 |
 | `src/legal.css` | 공개 문서의 앱형 사이드바·코발트 제목 띠·번호 목차·본문·모바일·다크 스타일을 제공한다. | terms.html, privacy.html, Pretendard | 서비스 문서 디자인·반응형 |
 | `src/legal.js` | 문서의 Lenis 스크롤·현재 목차·읽는 위치·헤더 표시·목차 접기·기기 테마를 관리한다. | 문서 HTML, Lenis, legal CSS | 문서 탐색·테마·접근성 |
 | `terms.html` | 서비스 범위·외부 콘텐츠 권리·계정·자료 삭제와 문의 방법을 로그인 없이 안내하는 빌드 진입 HTML이다. | legal.js, legal.css, 로그인·설정·소개 링크 | 이용 조건 변경 |
@@ -182,6 +191,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
 {
   "version": 1,
   "files": {
+    "about.html": "85e5a3556c7b644acffc9a656c61277916c4a1c51c137fc8c2cf438ca7752c15",
     "cloud/api.mjs": "00532630132a64aab1407ec0f50d4c66c78379a78cf7a4d873907818548bb367",
     "cloud/auth.mjs": "cf61966037836dabd905875211b33ed2435ccb797f998bf2d644ba58aa13cc0a",
     "cloud/capture-media.mjs": "ed0dabb4cd723e1a140aca44723a62ed65e0de9a6f3e1edc020efa8fefcc5e75",
@@ -196,7 +206,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/store.mjs": "a208e21cfdf8a1964e62a8b52aa69818f3c2a3f55b161a09994e2acbb769ce4d",
     "cloud/uploads.mjs": "4dca740115c9513b15460d3c43546aeaf9ecfc6ae1b72494ecef81f56c5ae7b7",
     "cloud/worker.mjs": "4267d6f297105f11ae8650f4a74b26294da3072ec684049f6909ac5acf7cb56a",
-    "index.html": "4ab58e0efa76628d6e626e43155796b38b14750f52c59223fb5d08ac439b0c89",
+    "guide.html": "3a4d72f7c77836d52a0e445d9813325e79f939aba443155f587061b52780aabe",
+    "index.html": "8800afe16a70278791d6a5ec1e82b7ba9723ddfb5b398206496c7296e127c855",
     "privacy.html": "d1a1ab8d5f9ab8eb2302f359b298d3b238a285451e1d3a1aef5bac7f558c95dd",
     "public/google1737c3c3fb742fb4.html": "99de3767dea5c93a1fea64f257fa209327c284fca65bf825f118132a2b6ee318",
     "public/samples/along.html": "0f21ddd56f88ae82ca76a903b59a9d084daaed8f6198abbe42b1bc4c604c078f",
@@ -209,8 +220,9 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "public/samples/sample.css": "4c61e5526efcfff8dd410aa0a3e6121090c80c45ea16eb58448b16579d48d3f1",
     "public/samples/sample.js": "ea8540213023840b072a41d63deb463ff12001faf4e582489569e96945326f08",
     "public/samples/studio-kin.html": "490412b48a9e980dfdd386e82e5426cb584aa39e7802859df836f85fe65d5460",
-    "public/sw.js": "76f57a76251b3a3628f18d0a1c9fa61c7d4aeee7f4fb9f2afceec1a2818ea126",
+    "public/sw.js": "b0a4e2cec0fb3213dee61f53a3247fbc3f1f16bbf7d5b6d26f6897034fa029ac",
     "scripts/check-cloud-config.mjs": "1882c15eab9492a53eb26357e20ed41fcdc0961fb309447cd088db387496570b",
+    "scripts/prerender-public.mjs": "026f36e95b8850069e402a3e24e81a0d338f1014f45e31c31c80f73c63c59940",
     "scripts/verify-cloud-public.mjs": "0cd62f20e9a9b7fcc4e7880af42cb4d62275e6a5d9a103a001e8eaf7683b00f8",
     "server/ai.js": "16cc2cb09c1bc639623f4385322398a54177d874c09ab801aae3ac760a2f7c83",
     "server/capture.js": "9306ecc912805aa9759c20df768d6b07c871e471e54576c3ae440eaa10b12f82",
@@ -219,17 +231,17 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "server/store.js": "c6515af7cb34630eff1541556c75102c19fec32b6501e296f9eeb50825e12386",
     "src/Analysis.jsx": "97161df4903289c815f7c670f018fe2a1509dd4668f60a1f7b0c1501dddfc09f",
     "src/api.js": "1405e82f849acec422434a894e66feae6df9fed727d298fb613b1e5c38613690",
-    "src/App.jsx": "f4493a46fd9cfb598bcc2c6ad883fa398547bac792b037aece6c4a3d0a1b9825",
+    "src/App.jsx": "446bfdd93d0cf52d9514aa13bac12dfd87d13e87a4ed4753f3d373f6e22fb5f5",
     "src/cloud-images.js": "9b7e7bf07ab6a4c087a8622f965a5e6374167980f286400096c8268a1800ddb7",
     "src/Compare.jsx": "a1501f864e0b920c1608572b23658329e66d92f4d0a9e981d4e1175caff7dce8",
     "src/Detail.jsx": "fa2ad09c35a43380eb158031c946c684157960a6750d9f353f1ea87555762737",
     "src/Dialogs.jsx": "a47a64c59e2dd47a7dca273674255ea2690caab44f035e71b46fcbcabaa979a4",
-    "src/guide.css": "68a0b7a0c2f9021618ed487d6dab7494326ab3d40b1ef6e7b72fa744d452ccd7",
-    "src/Guide.jsx": "0f85598b4ea2cf443bf7ac8ecece471cf6a3c8db019e7a642cb9d35abc912cda",
+    "src/guide.css": "0eb2b59f0aebdf972c9f68f73ff37b62c1002e82e48390eea2c7dd55cda37da3",
+    "src/Guide.jsx": "9a1b877d3e90d0ec39dd66505c1e7a1aad4a1a95a599115c0344842c216c97f4",
     "src/Install.jsx": "95de8adb7caadc5fd0fde1e2888e73e05cfa8adce2f995227816eba554b74b94",
     "src/intro-extras.css": "54a0b89f518ad6d5d90e97cb82a92d08deb6ca2fc5499c402304707ce6aa27ad",
-    "src/intro.css": "e8348e5785250c49b85c86378198b36380702fe09d57bb71248e206fca257d2c",
-    "src/Intro.jsx": "1626ebf4d96407c71e9cdfb551d7ec0dcca01ae4ee769fcf049d7df7beeb3789",
+    "src/intro.css": "5a3b11d9943a452b23ad473e6c251d0c513b48c066e9e2a9c38beeff0dfb20b4",
+    "src/Intro.jsx": "cb8b7ac921d5ca8e161795f15d56967d0caf201368e839ccaf4f7dcd8c8c2f35",
     "src/IntroExtras.jsx": "4771ac53187800de7edb058b44c98a84612a4b549cb7f01929db3f914c8d91d1",
     "src/legal.css": "6d75e56c2a71e76dceff4bf6a22c51e0aaa813398f506015048eb37dc02ab26a",
     "src/legal.js": "07decae3f41dc6edc62cacc5bf8b205792bc7641bbe5d316c3cfa31b5874ce04",
@@ -238,9 +250,12 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/motion.js": "10bf4d7f00fd6f0fd97201733928e812b3075fa35efa7f41b40162b8a091e55a",
     "src/notifications.js": "72356bf4403b307ada276726c084d6d160bff33172dcd187e93e39d9e03b408c",
     "src/Projects.jsx": "26b655ecbd51e4fcd19e9138689372a276650ab8d07f265e76cfa6c90aa2b5bb",
+    "src/public-preview.jsx": "38e2f9d91506faa4eb071e0de97b0006eecc8e1e70a7c60c86a527a2da7662f5",
     "src/pwa.js": "22bc30af10a62e0744561405ae4aab512269b727cb73e5d4730fcb3fd7eebff7",
+    "src/routes.js": "07a66081a1e82e8449c5c1889f41bccc9baa5ee6714909b3871f56b9ed7893bd",
+    "src/service-content.js": "6fc56aa8fc81af63fb8b636e5787e7ea9064c90ae83fb0fd4b22c0a23789f01c",
     "src/smooth-scroll.js": "7012c573d75fc35536829486c7c1238c2d77043bd657fc4130faaab3129410c7",
-    "src/styles.css": "d37d4983eff6e4972a3aca5018774bc66cbf10f4fa0e4701a92b906d1cd35cf4",
+    "src/styles.css": "8623a3577ad76f7e8a109e2e6d7c371ea288926f369da479d8ddbf4f3c288d60",
     "src/UI.jsx": "e95e1d0c468fa05614f5273cd266fda9ca2e12bbaea686ae8860d49f4d455cf3",
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",
     "src/use-intro-motion.js": "a55457b7567af906dd9928a793ea53fa8cd01b9f61e68e81da77192c45b8e696",
@@ -257,7 +272,10 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "tests/cloud-network.test.mjs": "6e516dea339e867fc40432b9e37e3eb9df5a74e0509fd44422e63bfb942ad879",
     "tests/cloud-uploads.test.mjs": "a05d91f123593191071e4d6f7439d4650598d13c063888733d19544ccbed1306",
     "tests/open-notifications.test.mjs": "559495d67ecf381edd49d197122731acdc88c42f5ec94d9dcbdc3dddaac62286",
-    "vite.config.js": "a03da34bef24c16fff3eba616035fd6b7492688a13856956a4cb5e99822340aa",
+    "tests/public-content.test.mjs": "773ac15c9852fcf13f1a6b256d91f1ffe8cabe91179aebb1dcdefb2eeba1dc00",
+    "tests/public-navigation.test.mjs": "17f59cb06fcbb890e5604af40526b9a4ed88db85d91c211a889ab41cd34c0139",
+    "tests/public-routes.test.mjs": "5d333923d325e80b1418fa280ec22c4f1ecf453c6192e96350f2b4fb9bebfb82",
+    "vite.config.js": "a1b6b41007c2c8e154570cedac1e8420f8a5419a7ac6ee9ab1567aabfb9b8d2f",
     "wrangler.jsonc": "5cf33805ce38e75255cb994bd4db4ad6fc1d5d8dfb78d225267447c9a266cfdd"
   }
 }
