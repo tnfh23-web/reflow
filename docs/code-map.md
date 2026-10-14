@@ -1,6 +1,6 @@
 # REFLOW 파일 역할과 기능 흐름
 
-확인일: 2026-10-13. 문법을 몰라도 기능이 어디에서 처리되는지 찾기 위한 문서다. 현재 파일은 `.jsx/.js/.mjs`이며 TypeScript의 `.tsx/.ts`로 만든 프로젝트는 아니다.
+확인일: 2026-10-14. 문법을 몰라도 기능이 어디에서 처리되는지 찾기 위한 문서다. 현재 파일은 `.jsx/.js/.mjs`이며 TypeScript의 `.tsx/.ts`로 만든 프로젝트는 아니다.
 
 ## 처음에는 이 다섯 곳만 보면 된다
 
@@ -106,7 +106,7 @@ Worker는 캡처/미디어 어댑터를 연결한다. 공개 예시는 `public/c
 | `tests/open-notifications.test.mjs` | 알림을 명시적으로 켰을 때만 캡처·프로젝트 이벤트가 OS로 전달되고 끄면 중단되는지 검사한다. | src/notifications | 열린 앱 알림 변경 |
 | `vite.config.js` | React 앱과 두 정적 문서의 다중 페이지 빌드·개발 API 전달·서비스 워커 캐시 목록과 버전을 구성한다. | src, index/terms/privacy HTML, public/sw, dist | 개발 서버·빌드·PWA 자산 |
 | `wrangler.jsonc` | Cloudflare Worker/정적 자산과 기본 기능 플래그를 구성한다. | cloud/worker, dist | 클라우드 배포 구성 |
-| `index.html` | React 루트와 웹앱 메타 정보를 제공한다. | src/main | 페이지 시작·메타 정보 |
+| `index.html` | React 루트·검색용 PNG 아이콘·정규 주소·공유 메타 정보와 WebSite 사이트명 정보를 제공한다. | src/main, public/icons | 페이지 시작·검색/공유 메타 정보 |
 | `public/sw.js` | 앱 셸을 캐시하고 온라인/오프라인 요청을 처리한다. API·개인 이미지는 캐시하지 않는다. 캐시된 이동 응답을 정규화하고 알림 클릭 시 열린 앱으로 이동한다. | vite.config, pwa, notifications | 오프라인 열람·업데이트·알림 클릭 |
 | `src/legal.css` | 공개 문서의 앱형 사이드바·코발트 제목 띠·번호 목차·본문·모바일·다크 스타일을 제공한다. | terms.html, privacy.html, Pretendard | 서비스 문서 디자인·반응형 |
 | `src/legal.js` | 문서의 Lenis 스크롤·현재 목차·읽는 위치·헤더 표시·목차 접기·기기 테마를 관리한다. | 문서 HTML, Lenis, legal CSS | 문서 탐색·테마·접근성 |
@@ -196,8 +196,8 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "cloud/store.mjs": "a208e21cfdf8a1964e62a8b52aa69818f3c2a3f55b161a09994e2acbb769ce4d",
     "cloud/uploads.mjs": "4dca740115c9513b15460d3c43546aeaf9ecfc6ae1b72494ecef81f56c5ae7b7",
     "cloud/worker.mjs": "4267d6f297105f11ae8650f4a74b26294da3072ec684049f6909ac5acf7cb56a",
-    "index.html": "63f9d18041a8113df47bda0f3b400eab254e429ea176c3fe7a909e2bfaabebf1",
-    "privacy.html": "6fc151721f47e675d88a25daee9749a557d90d736167b91c341443f5ebf11a79",
+    "index.html": "4ab58e0efa76628d6e626e43155796b38b14750f52c59223fb5d08ac439b0c89",
+    "privacy.html": "d1a1ab8d5f9ab8eb2302f359b298d3b238a285451e1d3a1aef5bac7f558c95dd",
     "public/google1737c3c3fb742fb4.html": "99de3767dea5c93a1fea64f257fa209327c284fca65bf825f118132a2b6ee318",
     "public/samples/along.html": "0f21ddd56f88ae82ca76a903b59a9d084daaed8f6198abbe42b1bc4c604c078f",
     "public/samples/field-notes.html": "55691728843461cc1d244d1a209005a1697d99f29c797dd7f402265ac6b6cab1",
@@ -245,7 +245,7 @@ HTML은 예시 경로와 시작 틀, `sample.js`는 경로별 본문·구간·�
     "src/use-auto-hide-header.js": "30771397245aa8553dac049530301c574e7951f41f97c3ac27725aa58724455a",
     "src/use-intro-motion.js": "a55457b7567af906dd9928a793ea53fa8cd01b9f61e68e81da77192c45b8e696",
     "supabase/migrations/202610110001_reflow.sql": "1210b7b4384a749714b2752d1ce3ae7509c59adabc349c49f89d71522d917ca4",
-    "terms.html": "05f5251668dba18fd952af0365e03e29e9aab3060699ade420d8870137e1b299",
+    "terms.html": "816904a73ac3cd67bc0871dffe57fd294b07a13b445362fa63a0f018e906ce5d",
     "tests/capture-media.test.mjs": "a38f28df54b9c54042673bcf7a11337f1d3571352d046d71a4a5fe2bc8f238e4",
     "tests/capture-ready.test.mjs": "d48969c0cd77980c05f39f5ef572fcf2222710c43d693af7fa564c75d1b66b78",
     "tests/capture-tiles.test.mjs": "22e41181e0c726daa4cefd284e5fb7aa3f2790a0b336fda715a28280b11d1cbf",
